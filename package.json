@@ -10,6 +10,10 @@
   "author": "Camille",
   "license": "GPL-3.0-or-later",
   "dependencies": {
-    "electron": "^27.0.0"
+    "codemirror": "^6.0.1",
+    "electron": "^27.0.0",
+    "marked": "^9.1.2",
+    "mathjax": "^3.2.2",
+    "pdfjs": "^2.5.2"
   }
 }

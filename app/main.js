@@ -10,4 +10,6 @@ app.on("ready", () => {
         }
     })
     mainWindow.webContents.loadFile(as('index.html'))
+
+    mainWindow.on("closed", () => mainWindow = null)
 })
