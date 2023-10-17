@@ -1,0 +1,11 @@
+{
+  "name": "mapy",
+  "version": "0.1.0",
+  "description": "A Markdown Editor and Viewer.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Camille",
+  "license": "GPL-3.0-or-later"
+}
