@@ -7,9 +7,12 @@ app.on("ready", () => {
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
-        }
+        },
+        show: false
     })
     mainWindow.webContents.loadFile(as('index.html'))
+
+    mainWindow.once("ready-to-show", () => mainWindow.show())
 
     mainWindow.on("closed", () => mainWindow = null)
 })
