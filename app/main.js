@@ -1,12 +1,13 @@
 const { app, BrowserWindow, dialog, ipcMain } = require("electron")
-const path = require("path")
+const path = require("node:path")
 const as = fileName => path.join('app', 'view', fileName)
 
-app.on("ready", () => {
+app.whenReady().then(() => {
     let mainWindow = new BrowserWindow({
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
+            preload: path.join(__dirname, "view", "scripts", "preload.js")
         },
         show: false
     })
@@ -20,14 +21,15 @@ app.on("ready", () => {
     ipcMain.handle("showOpenFileDialog", options => {
         dialog.showOpenDialog(mainWindow, options || [])
     })
-})
 
-ipcMain.on('drag-drop-text', (event, data) => {
-    mainWindow.webContents.send('update-markdown', data)
-})
-
-ipcMain.on('drop-file', (event, filePath) => {
-    mainWindow.webContents.send('read-file', filePath)
+    ipcMain.handle('dark-mode:toggle', () => {
+        if (nativeTheme.shouldUseDarkColors) {
+          nativeTheme.themeSource = 'light'
+        } else {
+          nativeTheme.themeSource = 'dark'
+        }
+        return nativeTheme.shouldUseDarkColors
+      })
 })
 
 
