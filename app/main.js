@@ -1,5 +1,6 @@
 const { app, BrowserWindow, dialog, ipcMain } = require("electron")
 const path = require("node:path")
+const fs = require("fs")
 const as = fileName => path.join('app', 'view', fileName)
 
 app.whenReady().then(() => {
@@ -14,19 +15,36 @@ app.whenReady().then(() => {
 
     mainWindow.webContents.loadFile(as('index.html'))
 
+
     mainWindow.once("ready-to-show", () => mainWindow.show())
 
     mainWindow.on("closed", () => mainWindow = null)
 
-    ipcMain.handle("showOpenFileDialog", options => {
-        dialog.showOpenDialog(mainWindow, options || [])
+    ipcMain.on("showOpenFileDialog", e => {
+        dialog.showOpenDialog(mainWindow, {
+            filters: [
+                { 
+                    name: "Markdown 文件",
+                    extensions: ["md", "markdown"]
+                }, {
+                    name: "所有文件",
+                    extensions: ["*"]
+                }
+            ]
+        }).then(result => {
+            if (!result.canceled) {
+                const filePath = result.filePaths[0]
+                const fileContent = fs.readFileSync(filePath, "utf-8")
+                e.reply("file-content", fileContent)
+            }
+        })
     })
 
     ipcMain.handle('dark-mode:toggle', () => {
         if (nativeTheme.shouldUseDarkColors) {
-          nativeTheme.themeSource = 'light'
+            nativeTheme.themeSource = 'light'
         } else {
-          nativeTheme.themeSource = 'dark'
+            nativeTheme.themeSource = 'dark'
         }
         return nativeTheme.shouldUseDarkColors
       })

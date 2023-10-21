@@ -33,6 +33,7 @@
     "rehype-stringify": "^10.0.0",
     "remark": "^15.0.1",
     "remark-rehype": "^11.0.0",
+    "roc-chart": "^1.1.2",
     "textile-js": "^2.1.1",
     "wordcloud": "^1.2.2"
   }

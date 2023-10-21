@@ -2,7 +2,9 @@ const marked = require("marked");
 const { swapView } = require("./swap-view");
 const { showOpenFileDialog } = require("./dialogs");
 const { defaultTheme, nextTheme } = require("./theme")
+const { writeTextFile, readTextFile } = require("./read-or-write-files-and-directories")
 const { ipcRenderer } = require("electron")
+const fs = require("fs")
 
 const markdownView = document.querySelector("#markdown")
 const htmlView = document.querySelector("#html")
@@ -18,11 +20,31 @@ const themeButton = document.querySelector("#theme")
 
 const renderMarkdownToHtml = markdown => htmlView.innerHTML = marked.parse(markdown, { sanitize: true })
 
-markdownView.addEventListener("keyup", e => renderMarkdownToHtml(e.target.innerText))
+const updateHtml = () => renderMarkdownToHtml(markdownView.innerText)
+
+const markdownObserver = new MutationObserver(() => {
+    updateHtml()
+    if (markdownView.innerText !== "") {
+        saveMarkdownButton.disabled = false
+    }
+})
+const markdownObserverConfig = {
+    attributes: true, childList: true, subtree: true
+}
+markdownObserver.observe(markdownView, markdownObserverConfig)
+markdownView.addEventListener("keyup", updateHtml)
 
 swapButton.addEventListener("click", () => swapView(markdownView, htmlView))
 
-openFileButton.addEventListener("click", showOpenFileDialog)
+openFileButton.addEventListener("click", e => {
+    let path = ""
+    showOpenFileDialog()
+})
+
+ipcRenderer.on("file-content", (e, content) => {
+    markdownView.innerText = content
+})
+
 
 markdownView.addEventListener("drop", e => {
     e.preventDefault()
