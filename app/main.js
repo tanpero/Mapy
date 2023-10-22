@@ -3,12 +3,13 @@ const path = require("node:path")
 const fs = require("fs")
 const as = fileName => path.join('app', 'view', fileName)
 
+
+
 app.whenReady().then(() => {
     let mainWindow = new BrowserWindow({
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
-            preload: path.join(__dirname, "view", "scripts", "preload.js")
         },
         show: false
     })
@@ -35,19 +36,15 @@ app.whenReady().then(() => {
             if (!result.canceled) {
                 const filePath = result.filePaths[0]
                 const fileContent = fs.readFileSync(filePath, "utf-8")
-                e.reply("file-content", fileContent)
+                e.reply("open-file", {
+                    path: filePath,
+                    content: fileContent
+                })
             }
         })
     })
 
-    ipcMain.handle('dark-mode:toggle', () => {
-        if (nativeTheme.shouldUseDarkColors) {
-            nativeTheme.themeSource = 'light'
-        } else {
-            nativeTheme.themeSource = 'dark'
-        }
-        return nativeTheme.shouldUseDarkColors
-      })
+
 })
 
 

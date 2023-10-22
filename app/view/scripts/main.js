@@ -2,10 +2,14 @@ const marked = require("marked");
 const { swapView } = require("./swap-view");
 const { showOpenFileDialog } = require("./dialogs");
 const { defaultTheme, nextTheme } = require("./theme")
-const { writeTextFile, readTextFile } = require("./read-or-write-files-and-directories")
+const { extractFileName } = require("./text-util")
 const { ipcRenderer } = require("electron")
-const fs = require("fs")
+const fs = require("fs");
 
+let fileName = ""
+let filePath = ""
+
+const appTitle = document.querySelector("title")
 const markdownView = document.querySelector("#markdown")
 const htmlView = document.querySelector("#html")
 const newFileButton = document.querySelector("#new-file")
@@ -37,12 +41,14 @@ markdownView.addEventListener("keyup", updateHtml)
 swapButton.addEventListener("click", () => swapView(markdownView, htmlView))
 
 openFileButton.addEventListener("click", e => {
-    let path = ""
     showOpenFileDialog()
 })
 
-ipcRenderer.on("file-content", (e, content) => {
-    markdownView.innerText = content
+ipcRenderer.on("open-file", (e, file) => {
+    filePath = file.path
+    fileName = extractFileName(filePath)
+    markdownView.innerText = file.content
+    appTitle.innerText = `Mapy - ${fileName}`
 })
 
 
