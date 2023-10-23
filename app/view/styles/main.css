@@ -60,12 +60,12 @@ button:disabled {
 }
 
 .content {
-    height: 100vh;
+    height: 50vh;
     display: flex;
 }
 
 .raw-markdown, .rendered-html {
-    min-height: 100%;
+    min-height: 50%;
     max-width: 50%;
     flex-grow: 1;
     padding: 1em;
