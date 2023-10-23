@@ -16,11 +16,13 @@
     "codemirror": "^6.0.1",
     "d3": "^7.8.5",
     "drag-drop": "^7.2.0",
+    "dropzone": "^6.0.0-beta.2",
     "electron": "^27.0.0",
     "electron-is": "^3.0.0",
     "electron-store": "^8.1.0",
     "file-saver": "^2.0.5",
     "highlight.js": "^11.9.0",
+    "hotkeys-js": "^3.12.0",
     "html2canvas": "^1.4.1",
     "jspdf": "^2.5.1",
     "latex.js": "^0.12.6",
@@ -34,7 +36,9 @@
     "remark": "^15.0.1",
     "remark-rehype": "^11.0.0",
     "roc-chart": "^1.1.2",
+    "segmentit": "^2.0.3",
     "textile-js": "^2.1.1",
+    "tippy.js": "^6.3.7",
     "wordcloud": "^1.2.2"
   }
 }
