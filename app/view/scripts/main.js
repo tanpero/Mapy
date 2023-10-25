@@ -4,7 +4,8 @@ const { showOpenFileDialog } = require("./dialogs");
 const { defaultTheme, nextTheme } = require("./theme")
 const { extractFileName } = require("./text-util")
 const { ipcRenderer } = require("electron")
-const fs = require("fs");
+const fs = require("fs")
+const { wordcloud } = require("./word-cloud")
 
 let fileName = ""
 let filePath = ""
@@ -69,3 +70,7 @@ markdownView.addEventListener("dragover", e => e.preventDefault())
 themeButton.addEventListener("click", async () => {
     const isDarkMode = await window.darkMode.toggle()
 })
+
+wordcloud(
+    markdownView, document.getElementById("word-cloud")
+)

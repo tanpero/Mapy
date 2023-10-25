@@ -1,6 +1,35 @@
 const WordCloud = require("wordcloud")
 const stopwords = require("./stop-words")
 
+const TEXT_SCALE_BASELINE = 200
+const LOWEREST_LIMIT_OF_FREQUENCY = 5
+const ZIPF_EXPONENT = 1.5
+
+function calculateOptimalN(wordFrequencyList) {
+    // 计算信息熵
+    const totalWords = wordFrequencyList.reduce((sum, [, frequency]) => sum + frequency, 0);
+    let entropy = 0;
+    for (const [, frequency] of wordFrequencyList) {
+        const probability = frequency / totalWords;
+        entropy -= probability * Math.log2(probability);
+    }
+
+    // 齐普夫定律中的指数参数，通常在1.5到2.0之间
+    const zipfExponent = ZIPF_EXPONENT;
+
+    // 根据信息熵和齐普夫定律计算N
+    /*
+     * Math.pow(2, entropy) -> 文本不确定度
+     * Math.pow(totalWords, 1 / zipfExponent) -> 词频分类可能性
+     * 
+     */
+    console.log("信息熵：" + Math.pow(2, entropy) / 100)
+    console.log("词频种类可能性：" + Math.pow(totalWords, 1 / zipfExponent) / 100)
+    const optimalN = Math.round(Math.pow(2, entropy) * Math.pow(totalWords, 1 / zipfExponent) / 10000);
+
+    return optimalN;
+}
+
 const processWords = segments => {
     const wordCount = {} // 用于存储单词及其出现频率的对象
 
@@ -32,18 +61,18 @@ const processWords = segments => {
     return result
 }
 
-
-const text = el.innerText
 const segmenter = new Intl.Segmenter("zh", { granularity: "word" })
 
 const wordcloud = (el, cloud, shape = "circle") => {
     
-
     const update = () => {
+        const text = el.innerText
+        console.log(text)
         const segments = segmenter.segment(text)
         const wordsSource = [...segments].filter(ch => ch.isWordLike)
         const words = processWords(wordsSource)
         console.log(words)
+        console.log("N: " + calculateOptimalN(words))
                 
         WordCloud(cloud, {
             list: words,
@@ -51,10 +80,7 @@ const wordcloud = (el, cloud, shape = "circle") => {
         })
     }
     const observer = new MutationObserver(update)
-    observer.observe(el, { childList:true, subtree: true, attributes: true })
-    cloud.addEventListener("wordcloudstop", () => (
-        setTimeout(() => Array.from(document.querySelectorAll(".word-color")).forEach(e => e.classList.add("word-animate")), 2000)
-    ))
+    observer.observe(el, { childList: true, subtree: true, attributes: true })
 }
 
 module.exports = {
