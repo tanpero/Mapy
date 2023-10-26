@@ -10,6 +10,29 @@ const extractFileName = filePath => {
     return fileName
 }
 
+const filterMarkdown = text => {
+    const regexes = [
+        (/^\$[^$]*\$/gm), // 行内公式语法：$ ... $
+        (/<http[s]?:\/\/.*?>/gm), // 链接
+        (/`([^`]+)`/gm), // 行内代码语法：` ... `
+        (/\`\``[^`]*?\`\`\`/gm), // 代码块语法：```... ```
+        (/\[([^\]]+)\]\(([^)]+)\)/gm), // 行内链接语法：[]()
+        (/\<code\>(.*?)\<\/code\>/gm), // 代码块语法：<code>...</code>
+
+        (/!\[.*?\]\((.*?)(?:"(.*?)")?\)/gm), // 图片语法：![...](...)
+    ]
+  
+    let filteredText = text
+  
+    regexes.forEach((regex) => {
+        filteredText = filteredText.replace(regex, '')
+    })
+  
+    return filteredText
+}
+  
+
 module.exports = {
     extractFileName,
+    filterMarkdown,
 }

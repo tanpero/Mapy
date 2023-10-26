@@ -1,5 +1,6 @@
 const WordCloud = require("wordcloud")
 const stopwords = require("./stop-words")
+const { filterMarkdown } = require("./text-util")
 
 const TEXT_SCALE_BASELINE = 200
 const LOWEREST_LIMIT_OF_FREQUENCY = 5
@@ -66,7 +67,7 @@ const segmenter = new Intl.Segmenter("zh", { granularity: "word" })
 const wordcloud = (el, cloud, shape = "circle") => {
     
     const update = () => {
-        const text = el.innerText
+        const text = filterMarkdown(el.innerText)
         const segments = segmenter.segment(text)
         const wordsSource = [...segments].filter(ch => ch.isWordLike)
         const words = processWords(wordsSource)
