@@ -51,13 +51,7 @@ button:disabled {
     background-color: rgb(196, 204, 202);
 }
 
-.container {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    min-width: 100vw;
-    position: relative;
-}
+
 
 .content {
     height: 60vh;
