@@ -42,6 +42,8 @@ markdownView.addEventListener("keyup", updateHtml)
 
 swapButton.addEventListener("click", () => swapView(markdownView, htmlView))
 
+newFileButton.addEventListener("click", () => ipcRenderer.send("openNewBlankFileWindow"))
+
 openFileButton.addEventListener("click", e => {
     showOpenFileDialog()
 })
