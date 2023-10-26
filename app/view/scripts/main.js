@@ -7,6 +7,7 @@ const { ipcRenderer } = require("electron")
 const fs = require("fs")
 const path = require("path")
 const { wordcloud } = require("./word-cloud")
+const hotkeys = require("hotkeys-js")
 
 let fileStatus = {
     fileName: "",
@@ -44,8 +45,19 @@ swapButton.addEventListener("click", () => swapView(markdownView, htmlView))
 
 newFileButton.addEventListener("click", () => ipcRenderer.send("openNewBlankFileWindow"))
 
-openFileButton.addEventListener("click", e => {
-    showOpenFileDialog()
+openFileButton.addEventListener("click", showOpenFileDialog)
+
+document.addEventListener('keydown', function(event) {
+    // 检测Ctrl + O组合键
+    if (event.ctrlKey && event.key === 'O') {
+        console.log("Ctrl+O 被按下")
+        showOpenFileDialog()
+    }
+
+    // 检测Ctrl + Shift + M组合键
+    if (event.ctrlKey && event.shiftKey && event.key === 'M') {
+        console.log('Ctrl + Shift + M 被按下');
+    }
 })
 
 ipcRenderer.on("open-file", (e, file) => {

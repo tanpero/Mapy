@@ -1,20 +1,23 @@
 const { app, BrowserWindow, dialog, ipcMain } = require("electron")
 const path = require("node:path")
 const fs = require("fs")
-const { windowManager } = require("electron-window-manager")
+const HotKey = require("hotkeys-js")
 const as = fileName => path.join('app', 'view', fileName)
+
+const windowInitSettings = {
+    webPreferences: {
+        nodeIntegration: true,
+        contextIsolation: false,
+        webviewTag: true,
+    },
+    show: false
+}
 
 let mainWindow = null
 
 const createWindow = () => {
 
-    mainWindow = new BrowserWindow({
-        webPreferences: {
-            nodeIntegration: true,
-            contextIsolation: false,
-        },
-        show: false
-    })
+    mainWindow = new BrowserWindow(windowInitSettings)
 
     mainWindow.webContents.loadFile(as('index.html'))
 
@@ -28,13 +31,7 @@ app.whenReady().then(createWindow)
 
 
 ipcMain.on("openNewBlankFileWindow", e => {
-    let newWindow = new BrowserWindow({
-        webPreferences: {
-            nodeIntegration: true,
-            contextIsolation: false,
-        },
-        show: false
-    })
+    let newWindow = new BrowserWindow(windowInitSettings)
 
     newWindow.webContents.loadFile(as('index.html'))
     newWindow.once("ready-to-show", () => newWindow.show())
