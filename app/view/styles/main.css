@@ -60,7 +60,7 @@ button:disabled {
 }
 
 .content {
-    height: 50vh;
+    height: 60vh;
     display: flex;
 }
 
@@ -77,4 +77,13 @@ button:disabled {
     border: 5px solid rgb(238, 252, 250);
     background-color: rgb(238, 252, 250);
     font-family: monospace;
+}
+
+#word-cloud-container {
+    height: 45vh;
+}
+
+#word-cloud {
+    display: block;
+    height: 80%;
 }

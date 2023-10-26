@@ -67,17 +67,16 @@ const wordcloud = (el, cloud, shape = "circle") => {
     
     const update = () => {
         const text = el.innerText
-        console.log(text)
         const segments = segmenter.segment(text)
         const wordsSource = [...segments].filter(ch => ch.isWordLike)
         const words = processWords(wordsSource)
         console.log(words)
-        console.log("N: " + calculateOptimalN(words))
                 
         WordCloud(cloud, {
             list: words,
             shape
         })
+
     }
     const observer = new MutationObserver(update)
     observer.observe(el, { childList: true, subtree: true, attributes: true })
