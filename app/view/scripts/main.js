@@ -18,16 +18,14 @@ let fileStatus = {
 const appTitle = document.querySelector("title")
 const markdownView = document.querySelector("#markdown")
 const htmlView = document.querySelector("#html")
-const newFileButton = document.querySelector("#new-file")
-const openFileButton = document.querySelector("#open-file")
-const saveMarkdownButton = document.querySelector("#save-markdown")
 const saveHtmlButton = document.querySelector("#save-html")
 const savePdfButton = document.querySelector("#save-pdf")
 const showFileButton = document.querySelector("#show-file")
 const openInDefaultButton = document.querySelector("#open-in-default")
-const swapButton = document.querySelector("#swap")
-const themeButton = document.querySelector("#theme")
 
+/*
+ * Markdown 实时渲染
+ */
 const renderMarkdownToHtml = markdown => htmlView.innerHTML = marked.parse(markdown, { sanitize: true })
 
 const updateHtml = () => renderMarkdownToHtml(markdownView.innerText)
@@ -41,36 +39,11 @@ const markdownObserverConfig = {
 markdownObserver.observe(markdownView, markdownObserverConfig)
 markdownView.addEventListener("keyup", updateHtml)
 
-swapButton.addEventListener("click", () => swapView(markdownView, htmlView))
+/*
+ * 基本交互操作
+ */
 
-newFileButton.addEventListener("click", () => ipcRenderer.send("openNewBlankFileWindow"))
-
-openFileButton.addEventListener("click", showOpenFileDialog)
-
-document.addEventListener('keydown', function(event) {
-    // 检测Ctrl + O组合键
-    if (event.ctrlKey && event.key === 'O') {
-        console.log("Ctrl+O 被按下")
-        showOpenFileDialog()
-    }
-
-    // 检测Ctrl + Shift + M组合键
-    if (event.ctrlKey && event.shiftKey && event.key === 'M') {
-        console.log('Ctrl + Shift + M 被按下');
-    }
-})
-
-ipcRenderer.on("open-file", (e, file) => {
-    fileStatus.filePath = file.path
-    fileStatus.fileName = extractFileName(file.path)
-    markdownView.innerText = file.content
-    appTitle.innerText = `Mapy - ${fileStatus.fileName}`
-    fileStatus.isTitled = true
-})
-
-saveMarkdownButton.addEventListener("click", e => {
-    console.log(fileStatus.filePath)
-    console.log(fileStatus.isTitled)
+const toSaveMarkdownFile = () => {
     if (fileStatus.isTitled) {
         fs.writeFile(fileStatus.filePath, markdownView.innerText, e => {
             if (e) {
@@ -82,7 +55,33 @@ saveMarkdownButton.addEventListener("click", e => {
     } else {
         showSaveFileDialog()
     }
+}
+
+document.addEventListener('keydown',  event => {    
+
+    if (event.ctrlKey) {
+        switch(event.key.toLocaleUpperCase()) {
+            case "N": () => ipcRenderer.send("openNewBlankFileWindow")
+            break
+            case "O": showOpenFileDialog()
+            break
+            case "S": toSaveMarkdownFile()
+            break
+            case "P": swapView(markdownView, htmlView)
+            break
+        }
+    }
+
 })
+
+ipcRenderer.on("open-file", (e, file) => {
+    fileStatus.filePath = file.path
+    fileStatus.fileName = extractFileName(file.path)
+    markdownView.innerText = file.content
+    appTitle.innerText = `Mapy - ${fileStatus.fileName}`
+    fileStatus.isTitled = true
+})
+
 
 ipcRenderer.on("save-file", (e, file) => {
     const dir = path.dirname(file.path)
@@ -100,7 +99,20 @@ ipcRenderer.on("save-file", (e, file) => {
     appTitle.innerHTML = `Mapy - ${fileStatus.fileName}`
 })
 
+// TODO:将 HTML 输出到本地
+const toSaveHtmlFile = () => {}
 
+// TODO:生成 PDF 并输出本地
+const toSavePdfFile = () => {}
+
+// TODO: 更换界面主题
+// 涉及到 Electron API 的一些问题，暂时无法实现
+
+
+
+/*
+ * TODO: 拖拽文件
+ */
 
 markdownView.addEventListener("drop", e => {
     e.preventDefault()
@@ -116,10 +128,9 @@ markdownView.addEventListener("drop", e => {
 
 markdownView.addEventListener("dragover", e => e.preventDefault())
 
-themeButton.addEventListener("click", async () => {
-    const isDarkMode = await window.darkMode.toggle()
-})
-
+/*
+ * 词云
+ */
 wordcloud(
     markdownView, document.getElementById("word-cloud")
 )
