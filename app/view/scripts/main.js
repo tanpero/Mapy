@@ -1,10 +1,11 @@
 const marked = require("marked");
 const { swapView } = require("./swap-view");
-const { showOpenFileDialog } = require("./dialogs");
+const { showOpenFileDialog, showSaveFileDialog } = require("./dialogs");
 const { defaultTheme, nextTheme } = require("./theme")
 const { extractFileName } = require("./text-util")
 const { ipcRenderer } = require("electron")
 const fs = require("fs")
+const path = require("path")
 const { wordcloud } = require("./word-cloud")
 
 let fileStatus = {
@@ -50,7 +51,41 @@ ipcRenderer.on("open-file", (e, file) => {
     fileStatus.fileName = extractFileName(file.path)
     markdownView.innerText = file.content
     appTitle.innerText = `Mapy - ${fileStatus.fileName}`
+    fileStatus.isTitled = true
 })
+
+saveMarkdownButton.addEventListener("click", e => {
+    console.log(fileStatus.filePath)
+    console.log(fileStatus.isTitled)
+    if (fileStatus.isTitled) {
+        fs.writeFile(fileStatus.filePath, markdownView.innerText, e => {
+            if (e) {
+                alert(e.message)
+            }
+        })
+        fileStatus.fileName = extractFileName(fileStatus.filePath)
+        fileStatus.isTitled = true 
+    } else {
+        showSaveFileDialog()
+    }
+})
+
+ipcRenderer.on("save-file", (e, file) => {
+    const dir = path.dirname(file.path)
+    if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir, { recursive: true })
+    }
+    fs.writeFile(file.path, markdownView.innerText, e => {
+        if (e) {
+            alert(e.message)
+        }
+    })
+    fileStatus.filePath = file.path
+    fileStatus.fileName = extractFileName(fileStatus.filePath)
+    fileStatus.isTitled = true
+    appTitle.innerHTML = `Mapy - ${fileStatus.fileName}`
+})
+
 
 
 markdownView.addEventListener("drop", e => {

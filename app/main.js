@@ -44,6 +44,27 @@ app.whenReady().then(() => {
         })
     })
 
+    ipcMain.on("showSaveFileDialog", e => {
+        dialog.showSaveDialog(mainWindow, {
+            filters: [
+                { 
+                    name: "Markdown 文件",
+                    extensions: ["md", "markdown"]
+                }, {
+                    name: "所有文件",
+                    extensions: ["*"]
+                }
+            ]
+        }).then(result => {
+            if (!result.canceled) {
+                const filePath = result.filePath
+                e.reply("save-file", {
+                    path: filePath
+                })
+            }
+        })
+    })
+
 
 })
 

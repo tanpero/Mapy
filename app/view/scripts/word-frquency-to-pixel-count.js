@@ -32,21 +32,23 @@ function calculateFrequencyDistribution(wordFrequencyList) {
 
     const N = optimalN(wordFrequencyList)
 
-    // 选择前N个高频词，这里选择前10个，可以根据需要调整
+    // 选择前N个高频词
     const topNWords = wordFrequencyList.slice(0, Math.min(N, wordFrequencyList.length));
 
     // 计算高频词的总频度
-    const totalHighFrequency = topNWords.reduce((sum, [, frequency]) => sum + frequency, 0);
+    const totalHighFrequency = topNWords.reduce(
+            (sum, [, frequency]) => sum + frequency, 0);
 
     // 构建频度分布，表示每个高频词的频度占总频度的比例
-    const frequencyDistribution = topNWords.map(([word, frequency]) => [word, frequency / totalHighFrequency]);
+    const frequencyDistribution = topNWords.map(
+            ([word, frequency]) => [word, frequency / totalHighFrequency]);
 
     return frequencyDistribution;
 }
 
 // 计算文本规模函数，基于明确定义的 frequencyDistribution
 function calculateScale(varietyCount, frequencyDistribution) {
-    // 基本规模，这是一个经验值，可以根据具体需求调整
+    // 基本规模
     let baseScale = 1;
 
     // 根据词汇种类和高频词频度分布调整规模
