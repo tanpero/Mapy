@@ -7,8 +7,11 @@ const { ipcRenderer } = require("electron")
 const fs = require("fs")
 const { wordcloud } = require("./word-cloud")
 
-let fileName = ""
-let filePath = ""
+let fileStatus = {
+    fileName: "",
+    filePath: "",
+    isTitled: false,
+}
 
 const appTitle = document.querySelector("title")
 const markdownView = document.querySelector("#markdown")
@@ -29,9 +32,6 @@ const updateHtml = () => renderMarkdownToHtml(markdownView.innerText)
 
 const markdownObserver = new MutationObserver(() => {
     updateHtml()
-    if (markdownView.innerText !== "") {
-        saveMarkdownButton.disabled = false
-    }
 })
 const markdownObserverConfig = {
     attributes: true, childList: true, subtree: true
@@ -46,10 +46,10 @@ openFileButton.addEventListener("click", e => {
 })
 
 ipcRenderer.on("open-file", (e, file) => {
-    filePath = file.path
-    fileName = extractFileName(filePath)
+    fileStatus.filePath = file.path
+    fileStatus.fileName = extractFileName(file.path)
     markdownView.innerText = file.content
-    appTitle.innerText = `Mapy - ${fileName}`
+    appTitle.innerText = `Mapy - ${fileStatus.fileName}`
 })
 
 
