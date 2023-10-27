@@ -7,15 +7,29 @@ const { ipcRenderer } = require("electron")
 const fs = require("fs")
 const path = require("path")
 const { wordcloud } = require("./word-cloud")
-const hotkeys = require("hotkeys-js");
 const { clearInterval } = require("timers");
+const { markdown } = require("@codemirror/lang-markdown")
+const { basicSetup, EditorView } = require("codemirror")
 
 const appTitle = document.querySelector("title")
-const markdownView = document.querySelector("#markdown")
+const markdownWrapper = document.querySelector("#markdown")
 const htmlView = document.querySelector("#html")
 const savePdfButton = document.querySelector("#save-pdf")
 const showFileButton = document.querySelector("#show-file")
 const openInDefaultButton = document.querySelector("#open-in-default")
+
+new EditorView({
+    doc: "",
+    extensions: [
+        basicSetup,
+        markdown(),
+    ],
+    parent: markdownWrapper
+})
+
+const markdownView = document.querySelector(".cm-content")
+
+
 
 let fileStatus = {
     appTitleInfo: ["Mapy", "", "", " <未保存>"],
@@ -145,6 +159,11 @@ markdownView.addEventListener("keyup", () => {
     monitorID = setInterval(monitor, 5000)
 })
 
+
+/*
+ * 基本快捷键
+ */
+
 document.addEventListener('keydown',  event => {    
 
     if (event.ctrlKey) {
@@ -161,6 +180,11 @@ document.addEventListener('keydown',  event => {
     }
 
 })
+
+
+/*
+ * 响应交互事件
+ */
 
 ipcRenderer.on("open-file", (e, file) => {
     fileStatus.filePath = file.path
@@ -187,9 +211,6 @@ ipcRenderer.on("save-file", (e, file) => {
     fileStatus.isTitled = true
     appTitle.innerText = fileStatus.appTitleInfo.join("")
 })
-
-
-
 
 ipcRenderer.on("save-html-file", e => {
     const dir = path.dirname(file.path)
@@ -235,3 +256,5 @@ markdownView.addEventListener("dragover", e => e.preventDefault())
 wordcloud(
     markdownView, document.getElementById("word-cloud")
 )
+
+
