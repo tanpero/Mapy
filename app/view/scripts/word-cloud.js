@@ -64,10 +64,10 @@ const processWords = segments => {
 
 const segmenter = new Intl.Segmenter("zh", { granularity: "word" })
 
-const wordcloud = (el, cloud, shape = "circle") => {
+const wordcloud = (fn, cloud, shape = "circle") => {
     
     const update = () => {
-        const text = filterMarkdown(el.innerText)
+        const text = filterMarkdown(fn())
         const segments = segmenter.segment(text)
         const wordsSource = [...segments].filter(ch => ch.isWordLike)
         const words = processWords(wordsSource)
@@ -78,8 +78,8 @@ const wordcloud = (el, cloud, shape = "circle") => {
         })
 
     }
-    const observer = new MutationObserver(update)
-    observer.observe(el, { childList: true, subtree: true, attributes: true })
+
+    return update    
 }
 
 module.exports = {

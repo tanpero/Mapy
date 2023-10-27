@@ -10,16 +10,23 @@ const { wordcloud } = require("./word-cloud")
 const { clearInterval } = require("timers");
 const { markdown } = require("@codemirror/lang-markdown")
 const { basicSetup, EditorView } = require("codemirror")
+const { EditorState } = require("@codemirror/state")
 
 const markdownWrapper = document.querySelector("#markdown")
 const htmlView = document.querySelector("#html")
 
+const wordcloudContainer = document.getElementById("word-cloud")
+
 const cm = new EditorView({
-    doc: "",
-    extensions: [
-        basicSetup,
-        markdown(),
-    ],
+    state: EditorState.create({
+        doc: "",
+        extensions: [
+            basicSetup,
+            markdown(),
+            EditorView.updateListener.of(e => wordcloud(getMarkdown, wordcloudContainer)())
+        ],
+    }),
+    
     parent: markdownWrapper
 })
 
@@ -30,6 +37,7 @@ const setMarkdown = text => {
         changes: {from: 0, to: cm.state.doc.length, insert: text}
     })
 }
+
 
 const markdownView = document.querySelector(".cm-content")
 
@@ -178,8 +186,6 @@ document.addEventListener('keydown',  event => {
             break
             case "S": toSaveHtmlFile()
             break
-            case "P": swapView(markdownView, htmlView)
-            break
         }
     }
 
@@ -253,12 +259,4 @@ markdownView.addEventListener("drop", e => {
 })
 
 markdownView.addEventListener("dragover", e => e.preventDefault())
-
-/*
- * 词云
- */
-wordcloud(
-    markdownView, document.getElementById("word-cloud")
-)
-
 
