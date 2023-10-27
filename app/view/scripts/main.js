@@ -11,14 +11,10 @@ const { clearInterval } = require("timers");
 const { markdown } = require("@codemirror/lang-markdown")
 const { basicSetup, EditorView } = require("codemirror")
 
-const appTitle = document.querySelector("title")
 const markdownWrapper = document.querySelector("#markdown")
 const htmlView = document.querySelector("#html")
-const savePdfButton = document.querySelector("#save-pdf")
-const showFileButton = document.querySelector("#show-file")
-const openInDefaultButton = document.querySelector("#open-in-default")
 
-new EditorView({
+const cm = new EditorView({
     doc: "",
     extensions: [
         basicSetup,
@@ -27,9 +23,17 @@ new EditorView({
     parent: markdownWrapper
 })
 
+const getMarkdown = () => cm.state.doc.toString()
+
+const setMarkdown = text => {
+    cm.dispatch({
+        changes: {from: 0, to: cm.state.doc.length, insert: text}
+    })
+}
+
 const markdownView = document.querySelector(".cm-content")
 
-
+const appTitle = document.querySelector("title")
 
 let fileStatus = {
     appTitleInfo: ["Mapy", "", "", " <未保存>"],
@@ -70,7 +74,7 @@ let fileStatus = {
  */
 const renderMarkdownToHtml = markdown => htmlView.innerHTML = marked.parse(markdown, { sanitize: true })
 
-const updateHtml = () => renderMarkdownToHtml(markdownView.innerText)
+const updateHtml = () => renderMarkdownToHtml(getMarkdown())
 
 const markdownObserver = new MutationObserver(() => {
     updateHtml()
@@ -87,7 +91,7 @@ markdownView.addEventListener("keyup", updateHtml)
 
 const toSaveMarkdownFile = () => {
     if (fileStatus.isTitled) {
-        fs.writeFile(fileStatus.filePath, markdownView.innerText, e => {
+        fs.writeFile(fileStatus.filePath, getMarkdown(), e => {
             if (e) {
                 alert(e.message)
             }
@@ -189,7 +193,7 @@ document.addEventListener('keydown',  event => {
 ipcRenderer.on("open-file", (e, file) => {
     fileStatus.filePath = file.path
     fileStatus.fileName = extractFileName(file.path)
-    markdownView.innerText = file.content
+    setMarkdown(file.content)
     appTitle.innerText = fileStatus.appTitleInfo.join("")
     fileStatus.isTitled = true
     e.sender.send("set-pwd")
@@ -201,7 +205,7 @@ ipcRenderer.on("save-file", (e, file) => {
     if (!fs.existsSync(dir)) {
         fs.mkdirSync(dir, { recursive: true })
     }
-    fs.writeFile(file.path, markdownView.innerText, e => {
+    fs.writeFile(file.path, getMarkdown(), e => {
         if (e) {
             alert(e.message)
         }

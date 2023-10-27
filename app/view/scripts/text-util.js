@@ -87,12 +87,12 @@ function formatNode (node /* = doc.body */, indent = "    ") {
             if (childNode.nodeType === Node.ELEMENT_NODE) {
                 output += formatNode(childNode, indent + "    ")
             } else if (childNode.nodeType === Node.TEXT_NODE) {
-                output += `${childNode.textContent}\n`;
+                output += `${indent}${childNode.textContent}\n`
             }
         }
-        output += `${indent}</${node.nodeName.toLowerCase()}>\n`
+        output += `${indent}</${node.nodeName.toLowerCase()}>`
     } else {
-        output += "/>\n"
+        output += "/>"
     }
     return output
 }
