@@ -1,0 +1,81 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="Note document - October 27th, 2023">
+        <title>Mapy 笔记 - October 27th, 2023</title>
+    </head>
+    <body>
+        <h1>Mapy：关注思考过程的笔记工具</h1>
+<hr>
+<p>目前功能极其简陋，处于早期活跃开发阶段，仅有最基本的可用性，交互方式亟待重大改进。</p>
+<h2>使用方式</h2>
+<p>启动应用：</p>
+<pre><code class="language-bash">git clone https://github.com/tanpero/Mapy.git
+cd Mapy
+npm install
+npm start
+</code></pre>
+<p>新建文件：快捷键 <code>Ctrl N</code></p>
+<p>打开文件：快捷键 <code>Ctrl O</code></p>
+<p>保存文件：快捷键 <code>Ctrl S</code></p>
+<p>交换视图：快捷键 <code>Ctrl P</code></p>
+<h2>路线图</h2>
+<h3>即时目标</h3>
+<ul>
+<li><p>实时保存</p>
+</li>
+<li><p>将实时预览生成为 HTML 文件（快捷键为 <code>Ctrl S</code>）</p>
+</li>
+<li><p>Markdown 源码的高亮</p>
+</li>
+</ul>
+<h3>短期目标</h3>
+<ul>
+<li>支持内联代码和行间代码块的高亮、行号和自动缩进</li>
+<li>支持内联公式和行间公式块的渲染</li>
+<li>对于不同规模的文本，实现相对美观和一致的词云呈现外观</li>
+<li>支持显示图片</li>
+<li>当链接被单击时，在默认浏览器打开</li>
+<li>将实时预览生成为 PDF 文件（快捷键为 <code>Ctrl Shift S</code>）</li>
+<li>美化实时预览内容及 HTML 文件的显示风格</li>
+<li>支持拖拽导入图片和 Markdown 文件</li>
+</ul>
+<h3>中期目标</h3>
+<ul>
+<li><p>添加丰富的格式快捷键</p>
+</li>
+<li><p>实现预览区和编辑区的同步滚动</p>
+</li>
+<li><p>交互思路由“面向文件”转为“面向笔记”，弱化文件的存在</p>
+</li>
+<li><p>重构用户界面，使用更合理的方式呈现词云，笔记以 <code>tab</code> 页显示</p>
+</li>
+<li><p>实现笔记管理功能，支持分类和添加标签</p>
+</li>
+<li><p>呈现按日统计的写作频率热力图（已经实现内部逻辑，尚未接入用户界面，源代码位于 <code>app/view/scripts/thermodynamic-diagram.js</code></p>
+</li>
+<li><p>实现界面主题外观</p>
+</li>
+<li><p>支持笔记内目录</p>
+</li>
+<li><p>支持根据笔记分类、标题和内部链接生成知识图谱，并根据知识图谱追溯笔记</p>
+</li>
+<li><p>支持使用 <code>AsciiDoc</code>、<code>reStructureText</code>、<code>Org-Mode</code> 和 <code>Textile</code> 等标记格式编写笔记</p>
+</li>
+</ul>
+<h3>长期目标</h3>
+<ul>
+<li>实现写作任务规划，统计写作时长、写作进度</li>
+<li>追踪笔记更新和查阅情况</li>
+<li>为摘抄、资料归档、头脑风暴等应用场景提供更完善友好的支持</li>
+<li>笔记可复制为微信公众号、知乎、简书、掘金、Lofter 等平台编辑器直接可用的格式</li>
+<li>笔记可整合为幻灯片（基于 <code>Reveal.js</code>）</li>
+</ul>
+<h2>许可证</h2>
+<p>MPL</p>
+
+    </body>
+</html>

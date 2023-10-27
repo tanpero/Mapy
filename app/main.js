@@ -41,6 +41,7 @@ ipcMain.on("openNewBlankFileWindow", e => {
 })
 
 
+
 ipcMain.on("showOpenFileDialog", e => {
     dialog.showOpenDialog(BrowserWindow.getFocusedWindow(), {
         filters: [
@@ -79,6 +80,27 @@ ipcMain.on("showSaveFileDialog", e => {
         if (!result.canceled) {
             const filePath = result.filePath
             e.reply("save-file", {
+                path: filePath
+            })
+        }
+    })
+})
+
+ipcMain.on("showSaveHtmlFileDialog", e => {
+    dialog.showSaveDialog(BrowserWindow.getFocusedWindow(), {
+        filters: [
+            { 
+                name: "HTML 文件",
+                extensions: ["html"]
+            }, {
+                name: "所有文件",
+                extensions: ["*"]
+            }
+        ]
+    }).then(result => {
+        if (!result.canceled) {
+            const filePath = result.filePath
+            e.reply("save-html-file", {
                 path: filePath
             })
         }

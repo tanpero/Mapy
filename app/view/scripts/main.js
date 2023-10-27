@@ -1,8 +1,8 @@
 const marked = require("marked");
 const { swapView } = require("./swap-view");
-const { showOpenFileDialog, showSaveFileDialog } = require("./dialogs");
+const { showOpenFileDialog, showSaveFileDialog, showSaveHtmlFileDialog } = require("./dialogs");
 const { defaultTheme, nextTheme } = require("./theme")
-const { extractFileName } = require("./text-util")
+const { extractFileName, generateHTML } = require("./text-util")
 const { ipcRenderer } = require("electron")
 const fs = require("fs")
 const path = require("path")
@@ -57,6 +57,27 @@ const toSaveMarkdownFile = () => {
     }
 }
 
+
+// TODO:将 HTML 输出到本地
+const toSaveHtmlFile = () => {
+    if (fileStatus.isTitled) {
+        const html = htmlView.innerHTML
+        
+        const path = fileStatus.filePath.replace(/\.[^/.]+$/, ".html")
+        fs.writeFile(path, generateHTML(html), e => {
+            if (e) {
+                alert(e.message)
+            }
+        })
+        fileStatus.fileName = extractFileName(path)
+    } else {
+        showSaveHtmlFileDialog()
+    }
+}
+
+
+const toggleWordcloud = () => {}
+
 document.addEventListener('keydown',  event => {    
 
     if (event.ctrlKey) {
@@ -65,7 +86,7 @@ document.addEventListener('keydown',  event => {
             break
             case "O": showOpenFileDialog()
             break
-            case "S": toSaveMarkdownFile()
+            case "S": toSaveHtmlFile()
             break
             case "P": swapView(markdownView, htmlView)
             break
@@ -80,6 +101,7 @@ ipcRenderer.on("open-file", (e, file) => {
     markdownView.innerText = file.content
     appTitle.innerText = `Mapy - ${fileStatus.fileName}`
     fileStatus.isTitled = true
+    e.sender.send("set-pwd")
 })
 
 
@@ -99,8 +121,20 @@ ipcRenderer.on("save-file", (e, file) => {
     appTitle.innerHTML = `Mapy - ${fileStatus.fileName}`
 })
 
-// TODO:将 HTML 输出到本地
-const toSaveHtmlFile = () => {}
+
+
+
+ipcRenderer.on("save-html-file", e => {
+    const dir = path.dirname(file.path)
+    if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir, { recursive: true })
+    }
+    fs.writeFile(file.path, generateHTML(htmlView.innerHTML), e => {
+        if (e) {
+            alert(e.message)
+        }
+    })
+})
 
 // TODO:生成 PDF 并输出本地
 const toSavePdfFile = () => {}
