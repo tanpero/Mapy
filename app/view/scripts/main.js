@@ -11,6 +11,7 @@ const { clearInterval } = require("timers");
 const { markdown } = require("@codemirror/lang-markdown")
 const { basicSetup, EditorView } = require("codemirror")
 const { EditorState } = require("@codemirror/state")
+const { outputPDF } = require("./output-pdf")
 
 const markdownWrapper = document.querySelector("#markdown")
 const htmlView = document.querySelector("#html")
@@ -128,6 +129,17 @@ const toSaveHtmlFile = () => {
     }
 }
 
+
+const toSavePdfFile = () => {
+    if (fileStatus.isTitled) {
+        const html = htmlView.innerHTML
+        const pdfPath = fileStatus.filePath.replace(/\.[^/.]+$/, ".pdf")
+        outputPDF(html, pdfPath)
+    } else {
+        showSaveFileDialog()
+    }
+}
+
 /*
  *
  * 实时保存：当持续修改文档时，每 5s 保存一次
@@ -184,7 +196,15 @@ document.addEventListener('keydown',  event => {
             break
             case "O": showOpenFileDialog()
             break
-            case "S": toSaveHtmlFile()
+            case "S": {
+                if (!fileStatus.isTitled) {
+                    showSaveFileDialog()
+                    break
+                }
+                toSaveHtmlFile()
+            }
+            break
+            case "P": toSavePdfFile()
             break
         }
     }
@@ -234,8 +254,6 @@ ipcRenderer.on("save-html-file", e => {
     })
 })
 
-// TODO:生成 PDF 并输出本地
-const toSavePdfFile = () => {}
 
 // TODO: 更换界面主题
 // 涉及到 Electron API 的一些问题，暂时无法实现
