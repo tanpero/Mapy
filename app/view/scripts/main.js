@@ -96,6 +96,30 @@ hljs.addPlugin({
     }
 })
 
+/*
+ * TODO: 为代码块添加特殊样式
+ * 目前无法工作
+ */
+hljs.addPlugin({
+    "after:highlight": ({ code, language }) => {
+    const className = `language-${language}`;
+    return `
+      <div class="codeblock">
+        <div class="codeblock-top">
+          <div class="circle-red"></div>
+          <div class="circle-yellow"></div>
+          <div class="circle-green"></div>
+          <span class="language-title"><b>${language.toUpperCase()}</b></span>
+        </div>
+        <div class="codeblock-body">
+          <pre><code class="${className}">${code}</code></pre>
+        </div>
+      </div>
+    `;
+  },
+});
+
+
 const markdown = new MarkdownIt({
     html: true,
     xhtmlOut: true,

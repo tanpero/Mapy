@@ -1,0 +1,50 @@
+.codeblock {
+    width: 80%;
+    font-size: 16px;
+    display: block;
+    align-items: center;
+    justify-content: center;
+}
+.codeblock .codeblock-top {
+    height: 15px;
+    background-color: #23241f;
+    padding: 8px 12px;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+}
+.codeblock .codeblock-body {
+    background-color: #23241f;
+    font-size: 13px;
+    color: #666666;
+    overflow: auto;
+    padding: 20px;
+}
+.codeblock .codeblock-top div {
+    float: left;
+    margin-right: 10px;
+    width: 13px;
+    height: 13px;
+    background-color: #FF5F57;
+    border-radius: 50px;
+}
+.codeblock .codeblock-top .circle-yellow{
+    float: left;
+    margin-right: 10px;
+    width: 13px;
+    height: 13px;
+    background-color: #FFBD2E;
+    border-radius: 50px;
+}
+.codeblock .codeblock-top .circle-green{
+    float: left;
+    margin-right: 10px;
+    width: 13px;
+    height: 13px;
+    background-color: #28CA42;
+    border-radius: 50px;
+}
+
+.language-title {
+    margin-left: 25%;
+    text-shadow: -2px 0 #fff, 0 2px #fff, 2px 0 #fff, 0 -2px #fff;        
+}

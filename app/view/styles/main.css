@@ -83,7 +83,7 @@ button:disabled {
 pre {
     width: 100%;
     font-size: large;
-    border-radius: 5px;
+    border-radius: 10px;
     background-color: #23241f;
     counter-reset: linecounter;
 }
@@ -111,7 +111,7 @@ pre .line-num::before {
     margin-bottom: 20px;
 }
 
-eq, code {
+eq, code, li {
     text-indent: 0;
 }
 

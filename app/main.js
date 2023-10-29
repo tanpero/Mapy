@@ -1,4 +1,4 @@
-const { app, BrowserWindow, dialog, ipcMain } = require("electron")
+const { app, BrowserWindow, dialog, ipcMain, shell } = require("electron")
 const path = require("node:path")
 const fs = require("fs")
 const HotKey = require("hotkeys-js")
@@ -24,6 +24,11 @@ const createWindow = () => {
     mainWindow.once("ready-to-show", () => mainWindow.show())
 
     mainWindow.on("closed", () => mainWindow = null)
+
+    mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+        shell.openExternal(url)
+        return { action: "deny" }
+    })
 
 }
 
