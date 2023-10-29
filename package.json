@@ -38,6 +38,7 @@
     "mammoth": "^1.6.0",
     "mark.js": "^8.11.1",
     "markdown-it": "^13.0.2",
+    "markdown-it-emoji": "^2.0.2",
     "markdown-it-highlightjs": "^4.0.1",
     "markdown-it-replace-link": "^1.2.0",
     "markdown-it-table-of-contents": "^0.6.0",
@@ -53,6 +54,7 @@
     "segmentit": "^2.0.3",
     "textile-js": "^2.1.1",
     "tippy.js": "^6.3.7",
+    "twemoji": "^14.0.2",
     "vanilla-context-menu": "^1.6.0",
     "wordcloud": "^1.2.2"
   },

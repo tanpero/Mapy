@@ -138,7 +138,12 @@ const markdown = new MarkdownIt({
             "\\RR": "\\mathbb{R}",
         },
     },
-}).use(require("markdown-it-table-of-contents"))
+}).use(require("markdown-it-table-of-contents"), {
+    markerPattern: /^\[\[toc\]\]|^\[toc\]/im
+}).use(require("markdown-it-emoji", {
+    "smile": [ ":)", ":-)" ],
+    "laughing": ":D",
+}))
 
 
 
