@@ -45,6 +45,7 @@
     "markdown-it-replace-link": "^1.2.0",
     "markdown-it-table": "^4.1.1",
     "markdown-it-table-of-contents": "^0.6.0",
+    "markdown-it-task-lists": "^2.1.1",
     "markdown-it-texmath": "^1.0.0",
     "mousetrap": "^1.6.5",
     "npm-creole": "^0.3.6",

@@ -150,7 +150,7 @@ const markdown = new MarkdownIt({
     headerless: true,
     multibody:  true,
     aotolabel:  true,
-})
+}).use(require("markdown-it-task-lists"))
 
 
 
