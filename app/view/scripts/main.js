@@ -1,5 +1,6 @@
 const MarkdownIt = require("markdown-it")
-const { swapView } = require("./swap-view")
+const hljs = require("highlight.js")
+
 const {
     showOpenFileDialog, showSaveFileDialog, showSaveHtmlFileDialog
 } = require("./dialogs")
@@ -84,7 +85,22 @@ let fileStatus = {
  * Markdown 实时渲染
  */
 
-const markdown = new MarkdownIt()
+hljs.registerLanguage(
+    "javascript",
+    require("highlight.js/lib/languages/javascript")
+)
+
+const markdown = new MarkdownIt({
+    html: true,
+    xhtmlOut: true,
+    linkify: true,
+}).use(require("markdown-it-highlightjs"), { 
+    hljs,
+    register: {
+        cypher: require("highlightjs-cypher")
+    },
+    inline: true,
+ })
 const renderMarkdownToHtml = source => {
     htmlView.innerHTML = markdown.render(source)
 }

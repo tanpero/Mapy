@@ -52,6 +52,7 @@
     "wordcloud": "^1.2.2"
   },
   "devDependencies": {
+    "electron-builder": "^24.6.4",
     "ts-loader": "^9.5.0",
     "tslint": "^5.20.1",
     "tslint-config-standard": "^9.0.0",
