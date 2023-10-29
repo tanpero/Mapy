@@ -40,6 +40,7 @@
     "markdown-it": "^13.0.2",
     "markdown-it-highlightjs": "^4.0.1",
     "markdown-it-replace-link": "^1.2.0",
+    "markdown-it-table-of-contents": "^0.6.0",
     "markdown-it-texmath": "^1.0.0",
     "mousetrap": "^1.6.5",
     "npm-creole": "^0.3.6",

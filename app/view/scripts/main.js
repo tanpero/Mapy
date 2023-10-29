@@ -138,7 +138,10 @@ const markdown = new MarkdownIt({
             "\\RR": "\\mathbb{R}",
         },
     },
-})
+}).use(require("markdown-it-table-of-contents"))
+
+
+
 const renderMarkdownToHtml = source => {
     htmlView.innerHTML = markdown.render(source)
 }

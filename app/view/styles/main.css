@@ -99,7 +99,15 @@ pre .line-num::before {
     color: grey;
 }
 
+.table-of-contents li {
+    list-style-type: none;
+}
 
+.table-of-contents a {
+    text-decoration: none;
+    color: gray;
+}
+  
 
 .raw-markdown > p, blockquote {
     display: inline-block;
