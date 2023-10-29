@@ -1,14 +1,16 @@
-const marked = require("marked");
-const { swapView } = require("./swap-view");
-const { showOpenFileDialog, showSaveFileDialog, showSaveHtmlFileDialog } = require("./dialogs");
+const MarkdownIt = require("markdown-it")
+const { swapView } = require("./swap-view")
+const {
+    showOpenFileDialog, showSaveFileDialog, showSaveHtmlFileDialog
+} = require("./dialogs")
 const { defaultTheme, nextTheme } = require("./theme")
 const { extractFileName, generateHTML } = require("./text-util")
 const { ipcRenderer } = require("electron")
 const fs = require("fs")
 const path = require("path")
 const { wordcloud } = require("./word-cloud")
-const { clearInterval } = require("timers");
-const { markdown } = require("@codemirror/lang-markdown")
+const { clearInterval } = require("timers")
+const cm_lang_markdown = require("@codemirror/lang-markdown").markdown
 const { basicSetup, EditorView } = require("codemirror")
 const { EditorState } = require("@codemirror/state")
 const { outputPDF } = require("./output-pdf")
@@ -23,7 +25,7 @@ const cm = new EditorView({
         doc: "",
         extensions: [
             basicSetup,
-            markdown(),
+            cm_lang_markdown(),
             EditorView.updateListener.of(e => wordcloud(getMarkdown, wordcloudContainer)())
         ],
     }),
@@ -45,7 +47,7 @@ const markdownView = document.querySelector(".cm-content")
 const appTitle = document.querySelector("title")
 
 let fileStatus = {
-    appTitleInfo: ["Mapy", "", "", " <未保存>"],
+    appTitleInfo: ["Mapy", " - ", "新笔记", " <未保存>"],
     fileName: "",
     _name: "",
     filePath: "",
@@ -81,7 +83,11 @@ let fileStatus = {
 /*
  * Markdown 实时渲染
  */
-const renderMarkdownToHtml = markdown => htmlView.innerHTML = marked.parse(markdown, { sanitize: true })
+
+const markdown = new MarkdownIt()
+const renderMarkdownToHtml = source => {
+    htmlView.innerHTML = markdown.render(source)
+}
 
 const updateHtml = () => renderMarkdownToHtml(getMarkdown())
 
