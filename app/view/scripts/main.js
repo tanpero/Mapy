@@ -143,7 +143,14 @@ const markdown = new MarkdownIt({
 }).use(require("markdown-it-emoji", {
     "smile": [ ":)", ":-)" ],
     "laughing": ":D",
-}))
+})).use(require("markdown-it-easy-tables")
+).use(require("markdown-it-multimd-table"), {
+    multiline:  true,
+    rowspan:    true,
+    headerless: true,
+    multibody:  true,
+    aotolabel:  true,
+})
 
 
 
