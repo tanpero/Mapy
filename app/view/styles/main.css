@@ -73,6 +73,48 @@ button:disabled {
     font-family: monospace;
 }
 
+.rendered-html {
+    letter-spacing: 1px;
+    line-height: 1.5;
+    text-indent: 2em;
+    text-align: left;
+}
+
+pre {
+    width: 100%;
+    font-size: large;
+    border-radius: 5px;
+    background-color: #23241f;
+    counter-reset: linecounter;
+}
+
+pre .line-num {
+    min-width: 3ch;
+    display: inline-block;
+}
+
+pre .line-num::before {
+    counter-increment: linecounter;
+    content: counter(linecounter);
+    color: grey;
+}
+
+
+
+.raw-markdown > p, blockquote {
+    display: inline-block;
+    word-break: break-all;
+    overflow-wrap: break-word;
+}
+
+.rendered-html p + p {
+    margin-bottom: 20px;
+}
+
+eq, code {
+    text-indent: 0;
+}
+
 #word-cloud-container {
     height: 45vh;
 }

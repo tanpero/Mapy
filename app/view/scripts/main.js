@@ -1,6 +1,6 @@
 const MarkdownIt = require("markdown-it")
-const hljs = require("highlight.js")
-
+const hljs = require("highlight.js/lib/core")
+require("highlightjs-line-numbers.js")
 const {
     showOpenFileDialog, showSaveFileDialog, showSaveHtmlFileDialog
 } = require("./dialogs")
@@ -90,6 +90,12 @@ hljs.registerLanguage(
     require("highlight.js/lib/languages/javascript")
 )
 
+hljs.addPlugin({
+    "after:highlight": result => {
+        result.value = result.value.replace(/^/gm, '<span class="line-num"></span>')
+    }
+})
+
 const markdown = new MarkdownIt({
     html: true,
     xhtmlOut: true,
@@ -100,7 +106,15 @@ const markdown = new MarkdownIt({
         cypher: require("highlightjs-cypher")
     },
     inline: true,
- })
+}).use(require("markdown-it-texmath"), {
+    engine: require("katex"),
+    delimiter: "dollars",
+    katexOptions: {
+        macros: {
+            "\\RR": "\\mathbb{R}",
+        },
+    },
+})
 const renderMarkdownToHtml = source => {
     htmlView.innerHTML = markdown.render(source)
 }
