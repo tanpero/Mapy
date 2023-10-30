@@ -1,0 +1,20 @@
+/* image container */
+div.mermaid {
+    width: fit-content;
+}
+
+/* image title */
+.mermaid-title {
+    width: fit-content;
+    margin: auto;
+    font-weight: 900;
+    font-size: 2em;
+    color: white;
+    padding-bottom: 0.5em;
+}
+
+/* image itself */
+.mermaid > svg {
+    margin: auto;
+    display: block;
+}

@@ -48,3 +48,19 @@
     margin-left: 25%;
     text-shadow: -2px 0 #fff, 0 2px #fff, 2px 0 #fff, 0 -2px #fff;        
 }
+
+.named-fence-block {
+    position: relative;
+    padding-top: 2em;
+}
+  
+.named-fence-filename {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 0 4px;
+    font-weight: bold;
+    color: #8b87ff;
+    background: #030034;
+    opacity: 0.6;
+}

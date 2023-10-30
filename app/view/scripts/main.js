@@ -30,7 +30,7 @@ const cm = new EditorView({
             EditorView.updateListener.of(e => wordcloud(getMarkdown, wordcloudContainer)())
         ],
     }),
-    
+
     parent: markdownWrapper
 })
 
@@ -124,13 +124,15 @@ const markdown = new MarkdownIt({
     html: true,
     xhtmlOut: true,
     linkify: true,
-}).use(require("markdown-it-highlightjs"), { 
+})
+.use(require("markdown-it-highlightjs"), {
     hljs,
     register: {
         cypher: require("highlightjs-cypher")
     },
-    inline: true,
-}).use(require("markdown-it-texmath"), {
+    inline: false,
+})
+.use(require("markdown-it-texmath"), {
     engine: require("katex"),
     delimiter: "dollars",
     katexOptions: {
@@ -138,19 +140,25 @@ const markdown = new MarkdownIt({
             "\\RR": "\\mathbb{R}",
         },
     },
-}).use(require("markdown-it-table-of-contents"), {
+})
+.use(require("markdown-it-table-of-contents"), {
     markerPattern: /^\[\[toc\]\]|^\[toc\]/im
-}).use(require("markdown-it-emoji", {
+})
+.use(require("markdown-it-emoji", {
     "smile": [ ":)", ":-)" ],
     "laughing": ":D",
-})).use(require("markdown-it-easy-tables")
-).use(require("markdown-it-multimd-table"), {
+}))
+.use(require("markdown-it-easy-tables"))
+.use(require("markdown-it-multimd-table"), {
     multiline:  true,
     rowspan:    true,
     headerless: true,
     multibody:  true,
     aotolabel:  true,
-}).use(require("markdown-it-task-lists"))
+})
+.use(require("markdown-it-task-lists"))
+.use(require("markdown-it-named-code-blocks"))
+
 
 
 
@@ -181,7 +189,7 @@ const toSaveMarkdownFile = () => {
             }
         })
         fileStatus.fileName = extractFileName(fileStatus.filePath)
-        fileStatus.isTitled = true 
+        fileStatus.isTitled = true
     } else {
         showSaveFileDialog()
     }
@@ -191,7 +199,7 @@ const toSaveMarkdownFile = () => {
 const toSaveHtmlFile = () => {
     if (fileStatus.isTitled) {
         const html = htmlView.innerHTML
-        
+
         const path = fileStatus.filePath.replace(/\.[^/.]+$/, ".html")
         fs.writeFile(path, generateHTML(html), e => {
             if (e) {
@@ -221,14 +229,14 @@ const toSavePdfFile = () => {
  *
  * 保存时，isSaved = true
  * 当发生更改时，isSaved = false
- * 
+ *
  * 自首次更改时设置 5s 间隔的 monitor，同时 hasMonitor = true
  * 之后每次更改时，若 hasMonitor = true，则不设置 monitor
  * 若 monitor 发现未执行保存时 isSaved = true
  * 意味着进入慢速编辑或浏览状态
  * 于是销毁自身
  * 直至下一次更改时重新设置 monitor
- * 
+ *
  */
 
 
@@ -263,7 +271,7 @@ markdownView.addEventListener("keyup", () => {
  * 基本快捷键
  */
 
-document.addEventListener('keydown',  event => {    
+document.addEventListener('keydown',  event => {
 
     if (event.ctrlKey) {
         switch(event.key.toLocaleUpperCase()) {
