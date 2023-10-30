@@ -9,7 +9,7 @@ const { extractFileName, generateHTML } = require("./text-util")
 const { ipcRenderer } = require("electron")
 const fs = require("fs")
 const path = require("path")
-const { createWordCloudElement, removeWordCloudElement } = require("./word-cloud")
+//const { createWordCloudElement, removeWordCloudElement } = require("./word-cloud")
 const { clearInterval } = require("timers")
 const cm_lang_markdown = require("@codemirror/lang-markdown").markdown
 const { basicSetup, EditorView } = require("codemirror")
@@ -19,7 +19,7 @@ const { outputPDF } = require("./output-pdf")
 const markdownWrapper = document.querySelector("#markdown")
 const htmlView = document.querySelector("#html")
 
-const wordcloudContainer = document.getElementById("word-cloud")
+//const wordcloudContainer = document.getElementById("word-cloud")
 let hasWordCloud = false
 
 const cm = new EditorView({
@@ -120,12 +120,28 @@ hljs.addPlugin({
   },
 });
 
+const isurl = require("isurl")
+
 
 const markdown = new MarkdownIt({
     html: true,
     xhtmlOut: true,
     linkify: true,
-})
+    modifyToken (token, env) {
+        switch (token.type) {
+        case "image": // set all images to 200px width
+            let _path = token.attrObj.src
+            if (!isurl(_path) && !path.isAbsolute(_path)) {
+                token.attrObj.src = path.resolve(path.dirname(fileStatus.filePath), _path)
+            }
+            break
+        case "link_open":
+            // TODO: 以同样方式处理其他文档的链接，并在默认浏览器打开
+            token.attrObj.target = '_blank'
+            break
+        }
+      },
+}).use(require("markdown-it-modify-token"))
 .use(require("markdown-it-highlightjs"), {
     hljs,
     register: {
