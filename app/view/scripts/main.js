@@ -158,7 +158,13 @@ const markdown = new MarkdownIt({
 })
 .use(require("markdown-it-task-lists"))
 .use(require("markdown-it-named-code-blocks"))
-
+.use(require("markdown-it-expandable"))
+.use(require("markdown-it-ruby"))
+.use(require("markdown-it-adobe-plugin"))
+.use(require("markdown-it-front-matter"))
+.use(require("markdown-it-deflist"))
+.use(require("markdown-it-ins"))
+.use(require("markdown-it-abbr"))
 
 
 
