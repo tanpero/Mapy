@@ -9,7 +9,7 @@ const { extractFileName, generateHTML } = require("./text-util")
 const { ipcRenderer } = require("electron")
 const fs = require("fs")
 const path = require("path")
-const { wordcloud } = require("./word-cloud")
+const { createWordCloudElement, removeWordCloudElement } = require("./word-cloud")
 const { clearInterval } = require("timers")
 const cm_lang_markdown = require("@codemirror/lang-markdown").markdown
 const { basicSetup, EditorView } = require("codemirror")
@@ -20,6 +20,7 @@ const markdownWrapper = document.querySelector("#markdown")
 const htmlView = document.querySelector("#html")
 
 const wordcloudContainer = document.getElementById("word-cloud")
+let hasWordCloud = false
 
 const cm = new EditorView({
     state: EditorState.create({
@@ -27,7 +28,7 @@ const cm = new EditorView({
         extensions: [
             basicSetup,
             cm_lang_markdown(),
-            EditorView.updateListener.of(e => wordcloud(getMarkdown, wordcloudContainer)())
+            //EditorView.updateListener.of(e => wordcloud(getMarkdown, wordcloudContainer)())
         ],
     }),
 
@@ -165,6 +166,12 @@ const markdown = new MarkdownIt({
 .use(require("markdown-it-deflist"))
 .use(require("markdown-it-ins"))
 .use(require("markdown-it-abbr"))
+.use(require("markdown-it-mark"))
+.use(require("markdown-it-smartarrows"))
+.use(require("markdown-it-sub"))
+.use(require("markdown-it-sup"))
+.use(require("markdown-it-footnote"))
+
 
 
 
@@ -295,6 +302,19 @@ document.addEventListener('keydown',  event => {
             break
             case "P": toSavePdfFile()
             break
+            case "W": {
+                event.preventDefault()
+                if (event.altKey) {
+                    if (hasWordCloud) {
+                        removeWordCloudElement()
+                        hasWordCloud = false
+                        break
+                    }
+                    createWordCloudElement(getMarkdown())
+                    hasWordCloud = true
+                    break
+                }
+            }
         }
     }
 

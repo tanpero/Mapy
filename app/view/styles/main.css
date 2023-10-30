@@ -15,7 +15,7 @@ html, body {
 body {
     margin: 0;
     padding: 0;
-    position: absolute;
+    position: relative;
 }
 
 body, input {
@@ -54,12 +54,12 @@ button:disabled {
 
 
 .content {
-    height: 60vh;
+    height: 100vh;
     display: flex;
 }
 
 .raw-markdown, .rendered-html {
-    min-height: 50%;
+    
     max-width: 50%;
     flex-grow: 1;
     padding: 1em;
@@ -123,11 +123,12 @@ eq, code, li {
     text-indent: 0;
 }
 
-#word-cloud-container {
-    height: 45vh;
-}
-
 #word-cloud {
-    display: block;
-    height: 80%;
+    width: 600px;
+    height: 400px;
+    backdrop-filter: blur(10px);
+    opacity: 0.5;
+    top: 30%;
+    left: 30%;
+    z-index: 9999;
 }
