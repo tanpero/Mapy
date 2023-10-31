@@ -1,4 +1,4 @@
-require("../assets/SourceHanSerifCN-Regular-normal")
+//require("../assets/SourceHanSerifCN-Regular-normal")
 const { jsPDF } = require("jspdf")
 require("jspdf-autotable")
 let doc = new jsPDF({ 
@@ -10,14 +10,17 @@ let doc = new jsPDF({
     precision: 16, // 浮点数的精度
 })
 
-doc.setFont('SourceHanSerifCN-Regular', 'normal');
+//doc.setFont('SourceHanSerifCN-Regular', 'normal');
 
 const outputPDF = (html, path) => {
     doc.html(html, {
         callback (pdf) {
             pdf.save(path)
         },
-        x: 10, y: 10
+        top: 20,
+        bottom: 60,
+        left: 20,
+        width: 600
     })
 }
 
