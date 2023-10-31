@@ -300,6 +300,32 @@ markdownView.addEventListener("keyup", () => {
  * 基本快捷键
  */
 
+const filterMarkdown = text => {
+    const regexes = [
+        (/\n?\$\$[^$\$]*\$\$/gm), // 公式块语法 $$ ... $$
+        (/\$[^$]*\$/gm), // 行内公式语法：$ ... $
+        (/<http[s]?:\/\/.*?>/gm), // 链接
+        (/`([^`]+)`/gm), // 行内代码语法：` ... `
+        (/\`\``[^`]*?\`\`\`/gm), // 代码块语法：```... ```
+        (/\[([^\]]+)\]\(([^)]+)\)/gm), // 行内链接语法：[]()
+        (/\<code\>(.*?)\<\/code\>/gm), // 代码块语法：<code>...</code>
+
+        (/!\[.*?\]\((.*?)(?:"(.*?)")?\)/gm), // 图片语法：![...](...)
+    ]
+  
+    let filteredText = text
+  
+    regexes.forEach((regex) => {
+        filteredText = filteredText.replace(regex, '')
+    })
+  
+    return filteredText
+}
+
+
+const segmenter = new Intl.Segmenter("zh", { granularity: "word" })
+
+
 document.addEventListener('keydown',  event => {
 
     if (event.ctrlKey) {
@@ -320,6 +346,14 @@ document.addEventListener('keydown',  event => {
             break
             case "W": {
                 event.preventDefault()
+                const text = filterMarkdown(getMarkdown())
+    const segments = segmenter.segment(text)
+    const wordsSource = [...segments].filter(ch => ch.isWordLike)
+    const words = wordsSource
+console.clear()
+console.log(words)
+words.forEach(c => console.log(ch.segment))
+
                 if (event.altKey) {
                     if (hasWordCloud) {
                         removeWordCloudElement()

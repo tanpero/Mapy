@@ -5,7 +5,15 @@
   "main": "app/main.js",
   "scripts": {
     "start": "cls && electron .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dist": "electron-builder"
+  },
+  "build": {
+    "appId": "Mapy",
+    "win": {
+      "target": "NSIS",
+      "icon": "logo.png"
+    }
   },
   "author": "Camille",
   "license": "GPL-3.0-or-later",
@@ -23,7 +31,6 @@
     "d3-cloud": "^1.2.7",
     "drag-drop": "^7.2.0",
     "dropzone": "^6.0.0-beta.2",
-    "electron": "^27.0.0",
     "electron-is": "^3.0.0",
     "electron-store": "^8.1.0",
     "electron-tabs": "^1.0.2",
@@ -92,6 +99,7 @@
     "vanilla-context-menu": "^1.6.0"
   },
   "devDependencies": {
+    "electron": "^27.0.0",
     "electron-builder": "^24.6.4",
     "ts-loader": "^9.5.0",
     "tslint": "^5.20.1",
