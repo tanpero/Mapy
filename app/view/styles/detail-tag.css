@@ -1,9 +1,9 @@
-details {
-    background-color: aqua;
+summary {
+    background-color: rgb(40, 52, 52);
 }
 
 details [open] {
-    background-color: bisque;
+    background-color: rgb(123, 113, 100);
 }
 
 details summary { 
@@ -14,11 +14,33 @@ details summary > * {
     display: inline;
 }
 
-summary:hover::after {
+:not(details [open]) summary:hover::after {
     background-color: #333;
     color: #fff;
     padding: 10px;
     border-radius: 5px;
     z-index: 1;
+    margin-left: 5px;
     content: "显示详细信息";
 }
+
+details > *:not(summary) {
+    border-left: 2px solid #333;
+    margin-top: 0;
+    padding: 1rem;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-bottom: 0;
+    padding-top: 0;
+}
+
+details > :nth-child(2) {
+    padding-top: 1rem;
+}
+
+details > :last-child {
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #333;
+}
+
+

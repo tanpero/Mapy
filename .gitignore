@@ -1,5 +1,4 @@
-# Created by https://www.toptal.com/developers/gitignore/api/macos,linux,node,emacs,vim,git,eclipse,webstorm,windows,visualstudiocode
-# Edit at https://www.toptal.com/developers/gitignore?templates=macos,linux,node,emacs,vim,git,eclipse,webstorm,windows,visualstudiocode
+package-lock.json
 
 ### Eclipse ###
 .metadata
@@ -154,7 +153,8 @@ flycheck_*.el
 .LSOverride
 
 # Icon must end with two \r
-Icon
+Icon
+
 
 # Thumbnails
 ._*
