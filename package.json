@@ -9,11 +9,23 @@
     "dist": "electron-builder"
   },
   "build": {
-    "appId": "Mapy",
-    "win": {
-      "target": "NSIS",
-      "icon": "logo.png"
+    "appId": "com.tanpero.mapy",
+    "productName": "Mapy",
+    "nsis": {
+      "oneClick": false, 
+      "allowElevation": true, 
+      "allowToChangeInstallationDirectory": true, 
+      "installerIcon": "logo.ico",
+      "uninstallerIcon": "logo.ico",
+      "installerHeaderIcon": "logo.ico",
+      "createDesktopShortcut": true, 
+      "createStartMenuShortcut": true,
+      "shortcutName": "Mapy"
     }
+  },
+  "win": {
+    "target": "nsis",
+    "icon": "logo.ico"
   },
   "author": "Camille",
   "license": "GPL-3.0-or-later",

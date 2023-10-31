@@ -15,14 +15,6 @@ npm install
 npm start
 ```
 
-新建文件：快捷键 `Ctrl N`
-
-打开文件：快捷键 `Ctrl O`
-
-保存文件：自动
-
-保存 HTML：快捷键 `Ctrl S`
-
 构建应用：
 
 ```bash
@@ -31,6 +23,15 @@ cd Mapy
 npm install
 npm run dist
 ```
+
+
+新建文件：快捷键 `Ctrl N`
+
+打开文件：快捷键 `Ctrl O`
+
+保存文件：自动
+
+保存 HTML：快捷键 `Ctrl S`
 
 ## 已有特性
 
@@ -87,6 +88,7 @@ npm run dist
 - 实现界面主题外观
 - 支持根据笔记分类、标题和内部链接生成知识图谱，并根据知识图谱追溯笔记
 - 支持使用 `AsciiDoc`、`reStructureText`、`Org-Mode` 和 `Textile` 等标记格式编写笔记
+- 支持实时协同操作（基于 `Y.js`）
 
 ### 长期目标
 
@@ -95,7 +97,8 @@ npm run dist
 - 为摘抄、资料归档、头脑风暴等应用场景提供更完善友好的支持
 - 笔记可复制为微信公众号、知乎、简书、掘金、Lofter 等平台编辑器直接可用的格式
 - 笔记可整合为幻灯片（基于 `Reveal.js`）
+- 笔记可拆分为记忆卡片
 
 ## 许可证
 
-MPL
+GPL-3.0-or-later
