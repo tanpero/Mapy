@@ -1,6 +1,5 @@
 const MarkdownIt = require("markdown-it")
 const hljs = require("highlight.js/lib/core")
-require("highlightjs-line-numbers.js")
 const {
     showOpenFileDialog, showSaveFileDialog, showSaveHtmlFileDialog
 } = require("./dialogs")
@@ -22,14 +21,19 @@ const htmlView = document.querySelector("#html")
 //const wordcloudContainer = document.getElementById("word-cloud")
 let hasWordCloud = false
 
+const { oneDark } = require("@codemirror/theme-one-dark")
+
 const cm = new EditorView({
     state: EditorState.create({
         doc: "",
         extensions: [
             basicSetup,
             cm_lang_markdown(),
+            oneDark,
+            EditorView.lineWrapping,
             //EditorView.updateListener.of(e => wordcloud(getMarkdown, wordcloudContainer)())
         ],
+        
     }),
 
     parent: markdownWrapper
@@ -140,7 +144,7 @@ const markdown = new MarkdownIt({
             token.attrObj.target = '_blank'
             break
         }
-      },
+    },
 }).use(require("markdown-it-modify-token"))
 .use(require("markdown-it-highlightjs"), {
     hljs,
@@ -188,7 +192,7 @@ const markdown = new MarkdownIt({
 .use(require("markdown-it-sup"))
 .use(require("markdown-it-footnote"))
 
-
+markdownView.focus()
 
 
 const renderMarkdownToHtml = source => {

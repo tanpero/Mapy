@@ -1,0 +1,24 @@
+details {
+    background-color: aqua;
+}
+
+details [open] {
+    background-color: bisque;
+}
+
+details summary { 
+    cursor: pointer;
+}
+  
+details summary > * {
+    display: inline;
+}
+
+summary:hover::after {
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    z-index: 1;
+    content: "显示详细信息";
+}
