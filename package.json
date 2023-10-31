@@ -4,8 +4,7 @@
   "description": "A Markdown Editor and Viewer.",
   "main": "app/main.js",
   "scripts": {
-    "start": "cls && electron .",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron .",
     "dist": "electron-builder"
   },
   "build": {
@@ -27,8 +26,6 @@
     "target": "nsis",
     "icon": "logo.ico"
   },
-  "author": "Camille",
-  "license": "GPL-3.0-or-later",
   "dependencies": {
     "@codemirror/lang-markdown": "^6.2.2",
     "@codemirror/theme-one-dark": "^6.1.2",
@@ -41,6 +38,7 @@
     "codemirror": "^6.0.1",
     "d3": "^7.8.5",
     "d3-cloud": "^1.2.7",
+    "dmg-license": "^1.0.11",
     "drag-drop": "^7.2.0",
     "dropzone": "^6.0.0-beta.2",
     "electron-is": "^3.0.0",
