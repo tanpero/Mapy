@@ -21,7 +21,7 @@ details summary > * {
     border-radius: 5px;
     z-index: 1;
     margin-left: 5px;
-    content: "显示详细信息";
+    content: "详细信息";
 }
 
 details > *:not(summary) {

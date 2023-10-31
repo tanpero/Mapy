@@ -36,12 +36,15 @@ textarea, input, div, button {
 }
 
 .raw-markdown, .rendered-html {
-    
+    padding: 1em;
     max-width: 50%;
     flex-grow: 1;
-    padding: 1em;
     overflow: scroll;
     font-size: 16px;
+}
+
+.raw-markdown {    
+    padding-right: 0;
 }
 
 .raw-markdown {
@@ -125,7 +128,7 @@ eq, code, li {
     height: 0;
 }
 ::-webkit-scrollbar-track {
-    background-color: transparent
+    background-color: rgb(40, 44, 52)
 }
 ::-webkit-scrollbar-thumb {
     background-color: #abb09f;
