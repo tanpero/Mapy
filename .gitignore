@@ -497,4 +497,7 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+package-lock.json
+pnpm-lock.yaml
+
 # End of https://www.toptal.com/developers/gitignore/api/macos,linux,node,emacs,vim,git,eclipse,webstorm,windows,visualstudiocode
