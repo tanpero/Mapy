@@ -1,6 +1,6 @@
 <div align="center">
 
-![Mapy Logo](./logo.ico)
+![Mapy Logo](./logo.png)
 
 # Mapy
 

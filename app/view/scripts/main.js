@@ -125,6 +125,8 @@ hljs.addPlugin({
 });
 
 const isurl = require("isurl")
+const meetHeading = require("./markdown-plugin/heading")
+const heading = require("./markdown-plugin/heading")
 
 const markdown = new MarkdownIt({
     html: true,
@@ -192,6 +194,8 @@ const markdown = new MarkdownIt({
 .use(require("@gerhobbelt/markdown-it-inline-text-color"))
 .use(require("markdown-it-complex-table").default)
 .use(require("markdown-it-small"))
+
+meetHeading(markdown)
 
 // 指定 Bib 文件路径后可以在 Markdown 中使用 BibTex 语法
 const addBibtexSupport = bibPath => {

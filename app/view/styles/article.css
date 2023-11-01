@@ -1,0 +1,96 @@
+img {
+    width: 80%;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin-left: 2em;
+    text-indent: 0;   
+    text-wrap: balance;
+}
+
+h1, h2 {
+    text-indent: -1rem;
+    max-width: 48rem;
+}
+
+h3, h4 {
+    max-width: 60rem;
+}
+
+pre {
+    width: 100%;
+    font-size: large;
+    border-radius: 10px;
+    background-color: #23241f;
+    counter-reset: linecounter;
+}
+
+pre .line-num {
+    min-width: 3ch;
+    display: inline-block;
+}
+
+pre .line-num::before {
+    counter-increment: linecounter;
+    content: counter(linecounter);
+    color: grey;
+}
+
+.table-of-contents li {
+    list-style-type: none;
+}
+
+.table-of-contents a {
+    text-decoration: none;
+    color: gray;
+}
+  
+
+.raw-markdown > p, blockquote {
+    display: inline-block;
+    word-break: break-all;
+    overflow-wrap: break-word;
+}
+
+.rendered-html p + p {
+    margin-bottom: 20px;
+}
+
+eq, code, li {
+    text-indent: 0;
+}
+
+#word-cloud {
+    width: 600px;
+    height: 400px;
+    backdrop-filter: blur(10px);
+    opacity: 0.5;
+    top: 30%;
+    left: 30%;
+    z-index: 9999;
+}
+
+@media (prefers-color-scheme: dark) {
+    img {
+      opacity: .75;
+      transition: opacity .5s ease-in-out;
+    }
+    img:hover {
+      opacity: 1;
+    }
+}
+
+a {
+    color: aquamarine;
+}
+
+
+h1, h2, h3, h4, h5, h6 {
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+    transition: border-color 0.2s ease-in-out;
+}
+      
+h1:hover, h2:hover, h3:hover, h4:hover, h5:hover, h6:hover {
+    border-color: powderblue;
+}
