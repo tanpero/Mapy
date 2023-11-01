@@ -126,7 +126,6 @@ hljs.addPlugin({
 
 const isurl = require("isurl")
 
-
 const markdown = new MarkdownIt({
     html: true,
     xhtmlOut: true,
@@ -137,10 +136,10 @@ const markdown = new MarkdownIt({
             let _path = token.attrObj.src
             if (!isurl(_path) && !path.isAbsolute(_path)) {
                 token.attrObj.src = path.resolve(path.dirname(fileStatus.filePath), _path)
+                
             }
             break
         case "link_open":
-            // TODO: 以同样方式处理其他文档的链接，并在默认浏览器打开
             token.attrObj.target = '_blank'
             break
         }
@@ -162,9 +161,8 @@ const markdown = new MarkdownIt({
         },
     },
 })
-.use(require("markdown-it-table-of-contents"), {
-    markerPattern: /^\[\[toc\]\]|^\[toc\]/im
-})
+.use(require("markdown-it-anchor"))
+.use(require("markdown-it-toc-done-right"))
 .use(require("markdown-it-emoji", {
     "smile": [ ":)", ":-)" ],
     "laughing": ":D",
@@ -191,6 +189,16 @@ const markdown = new MarkdownIt({
 .use(require("markdown-it-sub"))
 .use(require("markdown-it-sup"))
 .use(require("markdown-it-footnote"))
+.use(require("@gerhobbelt/markdown-it-inline-text-color"))
+.use(require("markdown-it-complex-table").default)
+.use(require("markdown-it-small"))
+
+// 指定 Bib 文件路径后可以在 Markdown 中使用 BibTex 语法
+const addBibtexSupport = bibPath => {
+    markdown.use(require("@arothuis/markdown-it-biblatex"), {
+        bibPath
+    })
+}
 
 markdownView.focus()
 
@@ -324,6 +332,9 @@ document.addEventListener('keydown',  event => {
             case "P": toSavePdfFile()
             break
             case "W": {
+
+                // TODO...
+                /*
                 event.preventDefault()
 
                 if (event.altKey) {
@@ -336,6 +347,7 @@ document.addEventListener('keydown',  event => {
                     hasWordCloud = true
                     break
                 }
+                */
             }
         }
     }
