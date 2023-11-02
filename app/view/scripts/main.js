@@ -296,14 +296,14 @@ setMonitor = () => {
 let originalSource = ""
 
 searchInput.addEventListener("blur", () => {
-    if (isSearchBoxVisible()) triggerBox()
+    if (isSearchBoxVisible()) triggerBox(searchBox, searchInput)
 })
 
 document.addEventListener('keydown',  event => {
 
     if (event.ctrlKey) {
         switch(event.key.toLocaleUpperCase()) {
-            case "N": () => ipcRenderer.send("openNewBlankFileWindow")
+            case "N": ipcRenderer.send("openNewBlankFileWindow")
             break
             case "O": showOpenFileDialog()
             break

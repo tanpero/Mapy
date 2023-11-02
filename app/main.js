@@ -17,9 +17,9 @@ const windows = new Set()
 const randomOffset = () => {
     let signX = Math.random() >= 0.5 ? 1 : -1    
     let signY = Math.random() >= 0.5 ? 1 : -1
-    let incrementX = Math.random() * 10
-    let incrementY = Math.random() * 10
-    return [signX * (10 + incrementX), signY * (10 + incrementY)]
+    let incrementX = Math.random() * 100
+    let incrementY = Math.random() * 100
+    return [signX * incrementX, signY * incrementY]
 }
 
 const createWindow = () => {
@@ -66,20 +66,8 @@ app.on("activate", (e, hasVisibleWindows) => !hasVisibleWindows && createWindow(
 app.on("window-all-closed", () => process.platform !== "darwin" && app.quit())
 
 
-ipcMain.on("openNewBlankFileWindow", (e, options) => {
-    let newWindow = new BrowserWindow(windowInitSettings)
-
-    newWindow.webContents.loadFile(as('index.html'))
-    newWindow.once("ready-to-show", () => newWindow.show())
-
-    newWindow.on("closed", () => newWindow = null)
-
-    if (options?.filePath) {
-        newWindow.webContents.on("did-finish-load", () => {
-            e.reply("append-file-path", options.filePath) // 将 "hello world" 消息发送给渲染进程
-        })
-    }
-    
+ipcMain.on("openNewBlankFileWindow", e => {
+    createWindow().focus()   
 })
 
 
