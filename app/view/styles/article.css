@@ -55,8 +55,8 @@ pre .line-num::before {
     color: grey;
 }
 
-pre .line-num::before :last-child {
-    content: "";
+code .line-num:last-of-type {
+    display: none;
 }
 
 .table-of-contents li {

@@ -143,13 +143,6 @@ markdown = new MarkdownIt({
         }
     },
 }).use(require("markdown-it-modify-token"))
-.use(require("markdown-it-highlightjs"), {
-    hljs,
-    register: {
-        cypher: require("highlightjs-cypher")
-    },
-    inline: false,
-})
 .use(require("markdown-it-texmath"), {
     engine: require("katex"),
     delimiter: "dollars",
@@ -158,6 +151,13 @@ markdown = new MarkdownIt({
             "\\RR": "\\mathbb{R}",
         },
     },
+})
+.use(require("markdown-it-highlightjs"), {
+    hljs,
+    register: {
+        cypher: require("highlightjs-cypher")
+    },
+    inline: true,
 })
 .use(require("markdown-it-named-code-blocks"))
 .use(require("markdown-it-anchor"))
