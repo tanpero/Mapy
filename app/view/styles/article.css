@@ -26,7 +26,7 @@ pre {
 }
 
 pre .line-num {
-    min-width: 3ch;
+    min-width: 2rem;
     display: inline-block;
 }
 
@@ -34,6 +34,10 @@ pre .line-num::before {
     counter-increment: linecounter;
     content: counter(linecounter);
     color: grey;
+}
+
+span.line-num::before :last-child {
+    content: "";
 }
 
 .table-of-contents li {

@@ -10,38 +10,73 @@ const windowInitSettings = {
         contextIsolation: false,
         webviewTag: true,
     },
-    show: false
 }
 
-let mainWindow = null
+const windows = new Set()
+
+const randomOffset = () => {
+    let signX = Math.random() >= 0.5 ? 1 : -1    
+    let signY = Math.random() >= 0.5 ? 1 : -1
+    let incrementX = Math.random() * 10
+    let incrementY = Math.random() * 10
+    return [signX * (10 + incrementX), signY * (10 + incrementY)]
+}
 
 const createWindow = () => {
 
-    mainWindow = new BrowserWindow(windowInitSettings)
+    let x, y
 
-    mainWindow.webContents.loadFile(as('index.html'))
+    const currentWindow = BrowserWindow.getFocusedWindow()
 
-    mainWindow.once("ready-to-show", () => mainWindow.show())
+    if (currentWindow) {
+        const [ currentWindowX, currentWindowY ] = currentWindow.getPosition()
+        const [ offsetX, offsetY ] = randomOffset()
+        x = currentWindowX + offsetX
+        y = currentWindowY + offsetY
+    }
 
-    mainWindow.on("closed", () => mainWindow = null)
+    let newWindow = new BrowserWindow(Object.assign(windowInitSettings, {
+        x, y, show: false
+    }))
 
-    mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+    newWindow.webContents.loadFile(as('index.html'))
+
+    newWindow.once("ready-to-show", () => newWindow.show())
+
+    newWindow.on("closed", () => {
+        windows.delete(newWindow)
+        newWindow = null
+    })
+
+    newWindow.webContents.setWindowOpenHandler(({ url }) => {
         shell.openExternal(url)
         return { action: "deny" }
     })
 
+    windows.add(newWindow)
+    return newWindow
 }
 
 app.whenReady().then(createWindow)
 
+app.on("activate", (e, hasVisibleWindows) => !hasVisibleWindows && createWindow())
 
-ipcMain.on("openNewBlankFileWindow", e => {
+app.on("window-all-closed", () => process.platform !== "darwin" && app.quit())
+
+
+ipcMain.on("openNewBlankFileWindow", (e, options) => {
     let newWindow = new BrowserWindow(windowInitSettings)
 
     newWindow.webContents.loadFile(as('index.html'))
     newWindow.once("ready-to-show", () => newWindow.show())
 
     newWindow.on("closed", () => newWindow = null)
+
+    if (options?.filePath) {
+        newWindow.webContents.on("did-finish-load", () => {
+            e.reply("append-file-path", options.filePath) // 将 "hello world" 消息发送给渲染进程
+        })
+    }
     
 })
 
@@ -50,8 +85,11 @@ ipcMain.on("openNewBlankFileWindow", e => {
 ipcMain.on("showOpenFileDialog", e => {
     dialog.showOpenDialog(BrowserWindow.getFocusedWindow(), {
         filters: [
-            { 
-                name: "Markdown 文件",
+            {
+                name: "纯文本",
+                extensions: ["txt"]
+            }, {
+                name: "Markdown",
                 extensions: ["md", "markdown"]
             }, {
                 name: "所有文件",

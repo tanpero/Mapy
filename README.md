@@ -29,7 +29,13 @@
   npm run dist
   ```
 
-### Keymap
+## Goals
+
+- 流畅的全功能笔记编辑体验
+- 开箱即用的高质量文档排版方案
+
+
+## Keymap
 
 <div align="center">
 
@@ -42,7 +48,7 @@
 
 </div>
 
-## 支持的 Markdown 语法:
+## Available Syntax:
 - [x] 标准Markdown语法
 - [x] 行内公式和公式块
 - [x] 待办清单

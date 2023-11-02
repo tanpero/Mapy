@@ -23,6 +23,10 @@ let hasWordCloud = false
 
 const { oneDark } = require("@codemirror/theme-one-dark")
 
+
+let updateHtml = () => {}
+let setMonitor = () => {}
+
 const cm = new EditorView({
     state: EditorState.create({
         doc: "",
@@ -31,13 +35,23 @@ const cm = new EditorView({
             cm_lang_markdown(),
             oneDark,
             EditorView.lineWrapping,
-            //EditorView.updateListener.of(e => wordcloud(getMarkdown, wordcloudContainer)())
+            EditorView.updateListener.of(e => {
+                updateHtml()
+                setMonitor()
+            })
         ],
         
     }),
 
     parent: markdownWrapper
 })
+
+const renderMarkdownToHtml = source => {
+    htmlView.innerHTML = markdown.render(source)
+}
+
+updateHtml = () => renderMarkdownToHtml(getMarkdown())
+
 
 const getMarkdown = () => cm.state.doc.toString()
 
@@ -101,37 +115,24 @@ hljs.addPlugin({
     }
 })
 
-/*
- * TODO: 为代码块添加特殊样式
- * 目前无法工作
- */
-hljs.addPlugin({
-    "after:highlight": ({ code, language }) => {
-    const className = `language-${language}`;
-    return `
-      <div class="codeblock">
-        <div class="codeblock-top">
-          <div class="circle-red"></div>
-          <div class="circle-yellow"></div>
-          <div class="circle-green"></div>
-          <span class="language-title"><b>${language.toUpperCase()}</b></span>
-        </div>
-        <div class="codeblock-body">
-          <pre><code class="${className}">${code}</code></pre>
-        </div>
-      </div>
-    `;
-  },
-});
-
 const isurl = require("isurl")
 const meetHeading = require("./markdown-plugin/heading")
-const heading = require("./markdown-plugin/heading")
+const mdit_replace_it = require("markdown-it-replace-it")
+mdit_replace_it.replacements.push({
+    name: "heading",
+    html: true,
+    re: /^#+\s([^#]+)/gm,
+    sub (s) {
+        return `aaa${s}aaa`
+    },
+    default: true,
+})
 
 const markdown = new MarkdownIt({
     html: true,
     xhtmlOut: true,
     linkify: true,
+    typographer: true,
     modifyToken (token, env) {
         switch (token.type) {
         case "image": // set all images to 200px width
@@ -165,6 +166,7 @@ const markdown = new MarkdownIt({
 })
 .use(require("markdown-it-anchor"))
 .use(require("markdown-it-toc-done-right"))
+.use(mdit_replace_it)
 .use(require("markdown-it-emoji", {
     "smile": [ ":)", ":-)" ],
     "laughing": ":D",
@@ -195,8 +197,6 @@ const markdown = new MarkdownIt({
 .use(require("markdown-it-complex-table").default)
 .use(require("markdown-it-small"))
 
-meetHeading(markdown)
-
 // 指定 Bib 文件路径后可以在 Markdown 中使用 BibTex 语法
 const addBibtexSupport = bibPath => {
     markdown.use(require("@arothuis/markdown-it-biblatex"), {
@@ -206,21 +206,6 @@ const addBibtexSupport = bibPath => {
 
 markdownView.focus()
 
-
-const renderMarkdownToHtml = source => {
-    htmlView.innerHTML = markdown.render(source)
-}
-
-const updateHtml = () => renderMarkdownToHtml(getMarkdown())
-
-const markdownObserver = new MutationObserver(() => {
-    updateHtml()
-})
-const markdownObserverConfig = {
-    attributes: true, childList: true, subtree: true
-}
-markdownObserver.observe(markdownView, markdownObserverConfig)
-markdownView.addEventListener("keyup", updateHtml)
 
 /*
  * 基本交互操作
@@ -284,9 +269,6 @@ const toSavePdfFile = () => {
  *
  */
 
-
-const toggleWordcloud = () => {}
-
 let monitorID = null
 
 const monitor = () => {
@@ -302,20 +284,18 @@ const monitor = () => {
     fileStatus.isSaved = true
 }
 
-markdownView.addEventListener("keyup", () => {
+setMonitor = () => {
     if (fileStatus.hasMonitor) {
         return
     }
     fileStatus.hasMonitor = true
     fileStatus.isSaved = false
     monitorID = setInterval(monitor, 5000)
-})
-
+}
 
 /*
  * 基本快捷键
  */
-
 
 document.addEventListener('keydown',  event => {
 
@@ -369,6 +349,7 @@ ipcRenderer.on("open-file", (e, file) => {
     setMarkdown(file.content)
     appTitle.innerText = fileStatus.appTitleInfo.join("")
     fileStatus.isTitled = true
+    // TODO...
     e.sender.send("set-pwd")
 })
 
