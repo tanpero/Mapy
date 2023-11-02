@@ -120,9 +120,44 @@ ${formattedContent}
 }
 
 
+const simplifyIndent = preTagId => {
+    const preTag = document.getElementById(preTagId)
+    if (!preTag) return
+  
+    // 获取所有代码行
+    const codeLines = preTag.innerHTML.split('\n')
+  
+    // 找到缩进最少的行数和缩进空格数
+    let minIndent = Infinity
+    let minIndentSpaces = 0
+    for (let i = 0; i < codeLines.length; i++) {
+        const line = codeLines[i]
+        const match = line.match(/^\s+/)
+        if (match) {
+            const spaces = match[0].length
+            if (spaces < minIndent) {
+                minIndent = spaces
+                minIndentSpaces = line.length - spaces
+            }
+        }
+    }
+  
+    // 将每行开头的空格替换为指定数量的空格
+    for (let i = 0; i < codeLines.length; i++) {
+        const line = codeLines[i]
+        const newLine = line.substring(minIndentSpaces)
+        codeLines[i] = newLine
+    }
+  
+    // 将修改后的代码重新赋值给 pre 标签
+    preTag.innerHTML = codeLines.join('\n')
+}
+  
+
 module.exports = {
     extractFileName,
     extractWorkPath,
     filterMarkdown,
     generateHTML,
+    simplifyIndent,
 }

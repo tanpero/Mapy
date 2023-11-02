@@ -47,15 +47,6 @@ const cm = new EditorView({
     parent: markdownWrapper
 })
 
-let markdown
-
-const renderMarkdownToHtml = source => {
-    htmlView.innerHTML = markdown.render(source)
-}
-
-updateHtml = () => renderMarkdownToHtml(getMarkdown())
-
-
 const getMarkdown = () => cm.state.doc.toString()
 
 const setMarkdown = text => {
@@ -123,7 +114,7 @@ const isurl = require("isurl")
 const meetHeading = require("./markdown-plugin/heading")
 
 
-markdown = new MarkdownIt({
+const markdown = new MarkdownIt({
     html: true,
     xhtmlOut: true,
     linkify: true,
@@ -179,7 +170,7 @@ markdown = new MarkdownIt({
 .use(require("markdown-it-ruby"))
 .use(require("markdown-it-adobe-plugin"))
 .use(require("markdown-it-front-matter"))
-.use(require("markdown-it-deflist"))
+.use(require("markdown-it-checkbox"))
 .use(require("markdown-it-ins"))
 .use(require("markdown-it-abbr"))
 .use(require("markdown-it-mark"))
@@ -199,6 +190,15 @@ const addBibtexSupport = bibPath => {
 }
 
 markdownView.focus()
+
+
+const renderMarkdownToHtml = source => {
+    htmlView.innerHTML = markdown.render(source)
+}
+
+updateHtml = () => renderMarkdownToHtml(getMarkdown())
+
+
 
 
 /*

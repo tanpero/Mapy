@@ -1,4 +1,4 @@
-const { app, BrowserWindow, dialog, ipcMain, shell } = require("electron")
+const { app, BrowserWindow, dialog, ipcMain, shell, nativeTheme } = require("electron")
 const path = require("node:path")
 const fs = require("fs")
 const HotKey = require("hotkeys-js")
@@ -23,6 +23,8 @@ const randomOffset = () => {
 }
 
 const createWindow = () => {
+
+    nativeTheme.themeSource = "dark"
 
     let x, y
 
