@@ -38,6 +38,7 @@ const cm = new EditorView({
             EditorView.updateListener.of(e => {
                 updateHtml()
                 setMonitor()
+                fileStatus.editionAccumulator += 1
             })
         ],
         
@@ -45,6 +46,8 @@ const cm = new EditorView({
 
     parent: markdownWrapper
 })
+
+let markdown
 
 const renderMarkdownToHtml = source => {
     htmlView.innerHTML = markdown.render(source)
@@ -98,6 +101,7 @@ let fileStatus = {
         appTitle.innerText = this.appTitleInfo.join("")
         this._saved = value
     },
+    editionAccumulator: 0,
 }
 
 /*
@@ -117,18 +121,9 @@ hljs.addPlugin({
 
 const isurl = require("isurl")
 const meetHeading = require("./markdown-plugin/heading")
-const mdit_replace_it = require("markdown-it-replace-it")
-mdit_replace_it.replacements.push({
-    name: "heading",
-    html: true,
-    re: /^#+\s([^#]+)/gm,
-    sub (s) {
-        return `aaa${s}aaa`
-    },
-    default: true,
-})
 
-const markdown = new MarkdownIt({
+
+markdown = new MarkdownIt({
     html: true,
     xhtmlOut: true,
     linkify: true,
@@ -164,9 +159,9 @@ const markdown = new MarkdownIt({
         },
     },
 })
+.use(require("markdown-it-named-code-blocks"))
 .use(require("markdown-it-anchor"))
 .use(require("markdown-it-toc-done-right"))
-.use(mdit_replace_it)
 .use(require("markdown-it-emoji", {
     "smile": [ ":)", ":-)" ],
     "laughing": ":D",
@@ -180,7 +175,6 @@ const markdown = new MarkdownIt({
     aotolabel:  true,
 })
 .use(require("markdown-it-task-lists"))
-.use(require("markdown-it-named-code-blocks"))
 .use(require("markdown-it-collapsible"))
 .use(require("markdown-it-ruby"))
 .use(require("markdown-it-adobe-plugin"))

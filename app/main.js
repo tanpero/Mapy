@@ -84,13 +84,12 @@ ipcMain.on("openNewBlankFileWindow", (e, options) => {
 
 ipcMain.on("showOpenFileDialog", e => {
     dialog.showOpenDialog(BrowserWindow.getFocusedWindow(), {
-        filters: [
-            {
-                name: "纯文本",
-                extensions: ["txt"]
-            }, {
+        filters: [{
                 name: "Markdown",
                 extensions: ["md", "markdown"]
+            }, {
+                name: "纯文本",
+                extensions: ["txt"]
             }, {
                 name: "所有文件",
                 extensions: ["*"]

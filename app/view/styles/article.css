@@ -2,6 +2,11 @@ img {
     width: 80%;
 }
 
+nav {
+    display: block;
+    height: auto;
+}
+
 h1, h2, h3, h4, h5, h6 {
     margin-left: 2em;
     text-indent: 0;   
@@ -17,12 +22,26 @@ h3, h4 {
     max-width: 60rem;
 }
 
+eqn {
+    font-size: 1.1rem;
+    overflow-x: scroll;
+}
+
+eqn ::-webkit-scrollbar {
+    width: 0;
+    height: 5px;
+}
+
 pre {
     width: 100%;
     font-size: large;
     border-radius: 10px;
     background-color: #23241f;
     counter-reset: linecounter;
+    overflow-x: scroll;
+}
+pre ::-webkit-scrollbar {
+    height: 5px;
 }
 
 pre .line-num {
@@ -36,7 +55,7 @@ pre .line-num::before {
     color: grey;
 }
 
-span.line-num::before :last-child {
+pre .line-num::before :last-child {
     content: "";
 }
 

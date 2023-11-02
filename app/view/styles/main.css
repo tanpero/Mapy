@@ -39,15 +39,12 @@ div {
     padding: 1em;
     max-width: 50%;
     flex-grow: 1;
-    overflow: scroll;
+    overflow-y: scroll;
     font-size: 16px;
 }
 
 .raw-markdown {    
     padding-right: 0;
-}
-
-.raw-markdown {
     border: 5px solid #23241f;
     color: rgb(238, 252, 250);
     font-family: monospace;
@@ -58,6 +55,7 @@ div {
     line-height: 1.5;
     text-indent: 2em;
     text-align: left;
+    word-break: break-all;
     width: 80cqw;
 }
 
