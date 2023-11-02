@@ -8,21 +8,23 @@ const { extractFileName, generateHTML } = require("./text-util")
 const { ipcRenderer } = require("electron")
 const fs = require("fs")
 const path = require("path")
-//const { createWordCloudElement, removeWordCloudElement } = require("./word-cloud")
 const { clearInterval } = require("timers")
 const cm_lang_markdown = require("@codemirror/lang-markdown").markdown
+const { oneDark } = require("@codemirror/theme-one-dark")
 const { basicSetup, EditorView } = require("codemirror")
 const { EditorState } = require("@codemirror/state")
 const { outputPDF } = require("./output-pdf")
 
+const {
+    triggerBox, searchHighlightPlugin, setInputListener, removeInputListener
+} = require("./search-and-replace")
+
 const markdownWrapper = document.querySelector("#markdown")
 const htmlView = document.querySelector("#html")
+const searchBox = document.querySelector(".search")
+const searchInput = document.querySelector("#search")
 
-//const wordcloudContainer = document.getElementById("word-cloud")
-let hasWordCloud = false
-
-const { oneDark } = require("@codemirror/theme-one-dark")
-
+searchBox.style.display = "none"
 
 let updateHtml = () => {}
 let setMonitor = () => {}
@@ -38,7 +40,6 @@ const cm = new EditorView({
             EditorView.updateListener.of(e => {
                 updateHtml()
                 setMonitor()
-                fileStatus.editionAccumulator += 1
             })
         ],
         
@@ -121,7 +122,7 @@ const markdown = new MarkdownIt({
     typographer: true,
     modifyToken (token, env) {
         switch (token.type) {
-        case "image": // set all images to 200px width
+        case "image":
             let _path = token.attrObj.src
             if (!isurl(_path) && !path.isAbsolute(_path)) {
                 token.attrObj.src = path.resolve(path.dirname(fileStatus.filePath), _path)
@@ -181,6 +182,7 @@ const markdown = new MarkdownIt({
 .use(require("@gerhobbelt/markdown-it-inline-text-color"))
 .use(require("markdown-it-complex-table").default)
 .use(require("markdown-it-small"))
+.use(searchHighlightPlugin)
 
 // 指定 Bib 文件路径后可以在 Markdown 中使用 BibTex 语法
 const addBibtexSupport = bibPath => {
@@ -307,6 +309,12 @@ document.addEventListener('keydown',  event => {
                 toSaveHtmlFile()
             }
             break
+            case "F": {
+                searchInput.focus()
+                triggerBox(searchBox, searchInput) ? setInputListener(searchInput, getMarkdown, markdown.render)
+                                : removeInputListener(setInputListener)
+                break
+            }
             case "P": toSavePdfFile()
             break
             case "W": {
