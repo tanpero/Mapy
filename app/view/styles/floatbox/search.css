@@ -1,4 +1,5 @@
 .search {
+    z-index: 1;
     display: none;
     position: fixed;
     width: 300px;

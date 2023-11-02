@@ -3,7 +3,6 @@ const hljs = require("highlight.js/lib/core")
 const {
     showOpenFileDialog, showSaveFileDialog, showSaveHtmlFileDialog
 } = require("./dialogs")
-const { defaultTheme, nextTheme } = require("./theme")
 const { extractFileName, generateHTML } = require("./text-util")
 const { ipcRenderer } = require("electron")
 const fs = require("fs")
@@ -23,6 +22,7 @@ const markdownWrapper = document.querySelector("#markdown")
 const htmlView = document.querySelector("#html")
 const searchBox = document.querySelector(".search")
 const searchInput = document.querySelector("#search")
+const isSearchBoxVisible = () => searchBox.style.display === "block"
 
 searchBox.style.display = "none"
 
@@ -293,6 +293,12 @@ setMonitor = () => {
  * 基本快捷键
  */
 
+let originalSource = ""
+
+searchInput.addEventListener("blur", () => {
+    if (isSearchBoxVisible()) triggerBox()
+})
+
 document.addEventListener('keydown',  event => {
 
     if (event.ctrlKey) {
@@ -310,8 +316,17 @@ document.addEventListener('keydown',  event => {
             }
             break
             case "F": {
-                searchInput.focus()
-                triggerBox(searchBox, searchInput) ? setInputListener(searchInput, getMarkdown, markdown.render)
+
+                // 刚按下 Ctrl-F
+                // 若此时搜索框不可见
+                // 说明即将启动搜索框，对原始文本存档
+                if (!isSearchBoxVisible()) {
+                    originalSource = getMarkdown()
+                } else {
+                    setMarkdown(originalSource)
+                }
+                triggerBox(searchBox, searchInput) ?
+                        setInputListener(searchInput, getMarkdown, markdown.render)
                                 : removeInputListener(setInputListener)
                 break
             }

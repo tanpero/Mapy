@@ -1,11 +1,14 @@
-const { envFromUnicodeTerms, plugin } = require("markdown-it-marked")
+const markdownIt = require("markdown-it")
+const { envFromTerms, plugin } = require("markdown-it-marked")
 
 const isVisible = box => {
-    return box.style.display === "block"
+    return box?.style?.display === "block"
 }
 
 const triggerBox = (box, input) => {
-    box.style.display = isVisible(box) ? "none" :  (setTimeout(() => input.focus(), 100), "block")
+    if (box?.style?.display) {
+        box.style.display = isVisible(box) ? "none" :  (setTimeout(() => input.focus(), 100), "block")
+    }    
     return isVisible(box)
 }
 
@@ -20,7 +23,7 @@ let listener = e => {}
 const setInputListener = (input, getMD, setHTML) => {
     listener = e => {
         if (e.key === "Enter") {
-            setHTML(getMD(), envFromUnicodeTerms([input.value]))
+            setHTML(getMD(), envFromTerms([input.value]))
         }
     }
 

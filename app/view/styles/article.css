@@ -83,6 +83,10 @@ eq, code, li {
     text-indent: 0;
 }
 
+mark {
+    border-radius: 3px;
+}
+
 #word-cloud {
     width: 600px;
     height: 400px;
