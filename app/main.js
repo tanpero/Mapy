@@ -1,7 +1,7 @@
-const { app, BrowserWindow, dialog, ipcMain, shell, nativeTheme } = require("electron")
+const { app, BrowserWindow, dialog, ipcMain, shell, nativeTheme, Menu } = require("electron")
 const path = require("node:path")
 const fs = require("fs")
-const HotKey = require("hotkeys-js")
+const applicationMenu = require("./application-menu")
 const as = fileName => path.join('app', 'view', fileName)
 
 const windowInitSettings = {
@@ -60,7 +60,10 @@ const createWindow = () => {
     return newWindow
 }
 
-app.whenReady().then(createWindow)
+app.whenReady().then(() => {
+    Menu.setApplicationMenu(applicationMenu)
+    createWindow()
+})
 
 app.on("activate", (e, hasVisibleWindows) => !hasVisibleWindows && createWindow())
 
