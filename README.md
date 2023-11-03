@@ -92,6 +92,28 @@
 - [ ] 笔记可整合为幻灯片（基于 `Reveal.js`）
 - [ ] 笔记可拆分为记忆卡片
 
+## THANKS
+
+
+目前为止，Mapy 的实现基于下列重要的项目。
+
+感谢开源作者们的出色工作！
+
+
+| 名称        | 作者                                |
+| ----------- | ----------------------------------- |
+| **Electron**    | 赵成 *(中国，杭州)*                   |
+| **CodeMirror**  | Marijn Haverbeke *(German, Berlin)*   |
+| **Markdown-It** | Vitaly Puzrin *(Israel, Nof haGalil)* |
+| **KaTeX**       | Khan Academy                          |
+| **HighlightJS** | Ivan Sagalaev *(USA, Sammamish)*      |
+| **D3**          | Mike Bostock *(USA, San Francisco)*   |
+| **jsPDF**       | James Hall *(UK, Leeds)*              |
+
+
+
+
+
 ## [LICENSE](./LICENSE)
 
 This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
