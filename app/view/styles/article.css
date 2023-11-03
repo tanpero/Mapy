@@ -172,3 +172,9 @@ tbody td:hover:before {
     background-color: rgba(255,255,255,0.2);
     z-index: -1;
 }
+
+.rendered-html ::selection {
+    background-color: rgb(133, 200, 239); 
+    color: rgb(255, 81, 0)
+}
+

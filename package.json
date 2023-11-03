@@ -105,7 +105,6 @@
     "rehype-stringify": "^10.0.0",
     "remark": "^15.0.1",
     "remark-rehype": "^11.0.0",
-    "roc-chart": "^1.1.2",
     "segmentit": "^2.0.3",
     "textile-js": "^2.1.1",
     "tippy.js": "^6.3.7",
