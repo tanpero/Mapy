@@ -66,6 +66,7 @@ let fileStatus = {
     fileName: "",
     _name: "",
     filePath: "",
+    htmlPath: "",
     get fileName() {
         return this._name
     },
@@ -224,20 +225,16 @@ const toSaveMarkdownFile = () => {
 
 
 const toSaveHtmlFile = () => {
-    if (fileStatus.isTitled) {
-        const html = htmlView.innerHTML
+    const content = generateHTML(htmlView.innerHTML)
 
-        const path = fileStatus.filePath.replace(/\.[^/.]+$/, ".html")
-        fs.writeFile(path, generateHTML(html), e => {
-            if (e) {
-                alert(e.message)
-            }
-        })
-        fileStatus.fileName = extractFileName(path)
+    if (!fileStatus.htmlPath) {
+        ipcRenderer.send("showSaveHtmlFileDialog")        
     } else {
-        showSaveHtmlFileDialog()
+        ipcRenderer.send("to-save-html", { filePath: fileStatus.htmlPath, content })
     }
 }
+
+
 
 
 const toSavePdfFile = () => {
@@ -371,12 +368,16 @@ ipcRenderer.on("file-has-been-opened", (e, file) => {
     e.sender.send("set-pwd")
 })
 
-
-ipcRenderer.on("save-file", (e, file) => {
+ipcRenderer.on("html-path-has-been-set", (e, file) => {    
     const dir = path.dirname(file.path)
     if (!fs.existsSync(dir)) {
         fs.mkdirSync(dir, { recursive: true })
     }
+    fileStatus.htmlPath = dir
+    ipcRenderer.send("to-save-html", toSaveHtmlFile())
+})
+
+ipcRenderer.on("save-file", (e, file) => {
     fs.writeFile(file.path, getMarkdown(), e => {
         if (e) {
             alert(e.message)
@@ -388,17 +389,6 @@ ipcRenderer.on("save-file", (e, file) => {
     appTitle.innerText = fileStatus.appTitleInfo.join("")
 })
 
-ipcRenderer.on("save-html-file", e => {
-    const dir = path.dirname(file.path)
-    if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir, { recursive: true })
-    }
-    fs.writeFile(file.path, generateHTML(htmlView.innerHTML), e => {
-        if (e) {
-            alert(e.message)
-        }
-    })
-})
 
 
 // TODO: 更换界面主题

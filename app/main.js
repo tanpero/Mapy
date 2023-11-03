@@ -65,16 +65,35 @@ app.on("activate", (e, hasVisibleWindows) => !hasVisibleWindows && createWindow(
 
 app.on("window-all-closed", () => process.platform !== "darwin" && app.quit())
 
+app.on("open-file", (event, filePath) => {
+    const targetWindow = windows.values().next().value
+    openFile(targetWindow, filePath)
+})
 
+app.on("will-finish-launching", () => {
+    app.on("open-file", (e, file) => {
+        const win = createWindow()
+        win.once("ready-to-show", () => {
+            openFile(win, file)
+        })
+    })
+})
+
+
+const openFile = module.exports.openFile = (targetWindow, path) => {
+    const content = fs.readFileSync(path).toString()
+    app.addRecentDocument(path)
+    targetWindow.setRepresentedFilename(path)
+    targetWindow.webContents.send("file-has-been-opened", { path, content })
+}
 
 ipcMain.on("openNewBlankFileWindow", e => {
     createWindow().focus()   
 })
 
-
-
 ipcMain.on("showOpenFileDialog", e => {
-    dialog.showOpenDialog(BrowserWindow.getFocusedWindow(), {
+    const win = BrowserWindow.getFocusedWindow()
+    dialog.showOpenDialog(win, {
         filters: [{
                 name: "Markdown",
                 extensions: ["md", "markdown"]
@@ -89,11 +108,7 @@ ipcMain.on("showOpenFileDialog", e => {
     }).then(result => {
         if (!result.canceled) {
             const filePath = result.filePaths[0]
-            const fileContent = fs.readFileSync(filePath, "utf-8")
-            e.reply("file-has-been-opened", {
-                path: filePath,
-                content: fileContent
-            })
+            openFile(win, filePath)
         }
     })
 })
@@ -121,6 +136,8 @@ ipcMain.on("showSaveFileDialog", e => {
 
 ipcMain.on("showSaveHtmlFileDialog", e => {
     dialog.showSaveDialog(BrowserWindow.getFocusedWindow(), {
+        title: "保存预览",
+        defaultPath: app.getPath("Desktop"),
         filters: [
             { 
                 name: "HTML 文件",
@@ -133,10 +150,13 @@ ipcMain.on("showSaveHtmlFileDialog", e => {
     }).then(result => {
         if (!result.canceled) {
             const filePath = result.filePath
-            e.reply("save-html-file", {
+            e.reply("html-path-has-been-set", {
                 path: filePath
             })
         }
     })
 })
 
+ipcMain.on("to-save-html", (e, { filePath, content }) => {
+    fs.writeFile(filePath, content, e => { if (e) console.error(e) })
+})
