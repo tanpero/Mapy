@@ -150,7 +150,6 @@ const markdown = new MarkdownIt({
     register: {
         cypher: require("highlightjs-cypher")
     },
-    inline: true,
 })
 .use(require("markdown-it-named-code-blocks"))
 .use(require("markdown-it-anchor"))
@@ -183,7 +182,8 @@ const markdown = new MarkdownIt({
 .use(require("@gerhobbelt/markdown-it-inline-text-color"))
 .use(require("markdown-it-complex-table").default)
 .use(require("markdown-it-small"))
-.use(searchHighlightPlugin)
+
+require("./markdown-plugin/container")(markdown)
 
 // 指定 Bib 文件路径后可以在 Markdown 中使用 BibTex 语法
 const addBibtexSupport = bibPath => {
@@ -388,23 +388,4 @@ ipcRenderer.on("save-file", (e, file) => {
     fileStatus.isTitled = true
     appTitle.innerText = fileStatus.appTitleInfo.join("")
 })
-
-
-/*
- * TODO: 拖拽文件
- */
-
-markdownView.addEventListener("drop", e => {
-    e.preventDefault()
-
-    for (const file of e.dataTransfer.files) {
-        if (file.type.startsWith("text/")) {
-            const reader = new FileReader()
-            reader.addEventListener("load", () => markdownView.innerText = reader.result)
-            reader.readAsText(file)
-        }
-    }
-})
-
-markdownView.addEventListener("dragover", e => e.preventDefault())
 

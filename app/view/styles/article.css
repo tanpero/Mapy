@@ -68,6 +68,17 @@ code .line-num:last-of-type {
     color: gray;
 }
 
+div .left {
+    text-align: left;
+}
+
+div .center {
+    text-align: center;
+}
+
+div .right {
+    text-align: right;
+}
 
 h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
     text-decoration: none;
