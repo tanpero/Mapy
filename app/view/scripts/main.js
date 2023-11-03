@@ -1,7 +1,8 @@
 const MarkdownIt = require("markdown-it")
 const hljs = require("highlight.js/lib/core")
 const {
-    showOpenFileDialog, showSaveFileDialog, showSaveHtmlFileDialog
+    showOpenFileDialog, showSaveFileDialog, showSaveHtmlFileDialog,
+    showFileHasBeenChangedAccidentally,
 } = require("./dialogs")
 const { extractFileName, generateHTML } = require("./text-util")
 const { ipcRenderer } = require("electron")
@@ -94,7 +95,6 @@ let fileStatus = {
         appTitle.innerText = this.appTitleInfo.join("")
         this._saved = value
     },
-    editionAccumulator: 0,
 }
 
 /*
@@ -370,9 +370,7 @@ ipcRenderer.on("file-has-been-opened", (e, file) => {
 
 ipcRenderer.on("html-path-has-been-set", (e, file) => {    
     const dir = file.path
-    if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir, { recursive: true })
-    }
+    
     fileStatus.htmlPath = dir
     toSaveHtmlFile()
 })
@@ -389,3 +387,21 @@ ipcRenderer.on("save-file", (e, file) => {
     appTitle.innerText = fileStatus.appTitleInfo.join("")
 })
 
+let externalEditedContent = ""
+
+ipcRenderer.on("file-has-been-changed", (e, file, content) => {
+    fileStatus.isSaved = false
+    clearInterval(monitorID)
+    ipcRenderer.send("showFileHasBeenChangedAccidentally")
+    externalEditedContent = content
+})
+
+ipcRenderer.on("reload-external-edit", e => {
+    fileStatus.isSaved = true
+    setMarkdown(externalEditedContent)
+})
+
+ipcRenderer.on("overwrite-external-edit", e => {
+    fileStatus.isSaved = true
+    toSaveMarkdownFile()
+})

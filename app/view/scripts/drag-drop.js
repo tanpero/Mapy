@@ -36,6 +36,7 @@ const setListener = markdownView => {
 
             // TODO: Move the logic of manipulating file to the main process
             const fileContent = fs.readFileSync(file.path, "utf-8")
+            
         } else {
             alert("不支持的文件类型")
         }
