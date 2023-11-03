@@ -99,6 +99,7 @@
 
 感谢开源作者们的出色工作！
 
+::: center
 
 | 名称        | 作者                                |
 | ----------- | ----------------------------------- |
@@ -110,9 +111,7 @@
 | **D3**          | Mike Bostock *(USA, San Francisco)*   |
 | **jsPDF**       | James Hall *(UK, Leeds)*              |
 
-
-
-
+:::
 
 ## [LICENSE](./LICENSE)
 
