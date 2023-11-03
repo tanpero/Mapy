@@ -369,12 +369,12 @@ ipcRenderer.on("file-has-been-opened", (e, file) => {
 })
 
 ipcRenderer.on("html-path-has-been-set", (e, file) => {    
-    const dir = path.dirname(file.path)
+    const dir = file.path
     if (!fs.existsSync(dir)) {
         fs.mkdirSync(dir, { recursive: true })
     }
     fileStatus.htmlPath = dir
-    ipcRenderer.send("to-save-html", toSaveHtmlFile())
+    toSaveHtmlFile()
 })
 
 ipcRenderer.on("save-file", (e, file) => {
@@ -388,12 +388,6 @@ ipcRenderer.on("save-file", (e, file) => {
     fileStatus.isTitled = true
     appTitle.innerText = fileStatus.appTitleInfo.join("")
 })
-
-
-
-// TODO: 更换界面主题
-// 涉及到 Electron API 的一些问题，暂时无法实现
-
 
 
 /*

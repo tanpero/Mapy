@@ -137,7 +137,7 @@ ipcMain.on("showSaveFileDialog", e => {
 ipcMain.on("showSaveHtmlFileDialog", e => {
     dialog.showSaveDialog(BrowserWindow.getFocusedWindow(), {
         title: "保存预览",
-        defaultPath: app.getPath("Desktop"),
+        defaultPath: app.getPath("desktop"),
         filters: [
             { 
                 name: "HTML 文件",
