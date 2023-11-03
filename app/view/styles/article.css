@@ -67,7 +67,11 @@ code .line-num:last-of-type {
     text-decoration: none;
     color: gray;
 }
-  
+
+
+h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
+    text-decoration: none;
+}
 
 .raw-markdown > p, blockquote {
     display: inline-block;

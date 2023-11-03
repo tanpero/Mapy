@@ -66,6 +66,7 @@ app.on("activate", (e, hasVisibleWindows) => !hasVisibleWindows && createWindow(
 app.on("window-all-closed", () => process.platform !== "darwin" && app.quit())
 
 
+
 ipcMain.on("openNewBlankFileWindow", e => {
     createWindow().focus()   
 })
@@ -89,7 +90,7 @@ ipcMain.on("showOpenFileDialog", e => {
         if (!result.canceled) {
             const filePath = result.filePaths[0]
             const fileContent = fs.readFileSync(filePath, "utf-8")
-            e.reply("open-file", {
+            e.reply("file-has-been-opened", {
                 path: filePath,
                 content: fileContent
             })
@@ -101,7 +102,7 @@ ipcMain.on("showSaveFileDialog", e => {
     dialog.showSaveDialog(BrowserWindow.getFocusedWindow(), {
         filters: [
             { 
-                name: "Markdown 文件",
+                name: "Markdown",
                 extensions: ["md", "markdown"]
             }, {
                 name: "所有文件",

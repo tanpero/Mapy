@@ -201,6 +201,7 @@ const renderMarkdownToHtml = source => {
 updateHtml = () => renderMarkdownToHtml(getMarkdown())
 
 
+require("./drag-drop")
 
 
 /*
@@ -360,7 +361,7 @@ document.addEventListener('keydown',  event => {
  * 响应交互事件
  */
 
-ipcRenderer.on("open-file", (e, file) => {
+ipcRenderer.on("file-has-been-opened", (e, file) => {
     fileStatus.filePath = file.path
     fileStatus.fileName = extractFileName(file.path)
     setMarkdown(file.content)
