@@ -23,12 +23,13 @@
   ```
 
 - 构建：
-  ```bash
-  git clone https://github.com/tanpero/Mapy.git
-  cd Mapy
-  npm install
-  npm run dist
-  ```
+
+```bash
+git clone https://github.com/tanpero/Mapy.git
+cd Mapy
+npm install
+npm run dist
+```
 
 ## Goals
 

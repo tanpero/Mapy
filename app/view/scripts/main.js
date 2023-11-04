@@ -237,11 +237,9 @@ const toSaveHtmlFile = () => {
 }
 
 
-
-
 const toSavePdfFile = () => {
     if (fileStatus.isTitled) {
-        const html = htmlView.innerHTML
+        const html = generateHTML(htmlView.innerHTML)
         const pdfPath = fileStatus.filePath.replace(/\.[^/.]+$/, ".pdf")
         outputPDF(html, pdfPath)
     } else {
@@ -298,6 +296,7 @@ let originalSource = ""
 searchInput.addEventListener("blur", () => {
     if (isSearchBoxVisible()) triggerBox(searchBox, searchInput)
 })
+
 
 document.addEventListener('keydown',  event => {
 
