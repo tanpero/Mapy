@@ -152,6 +152,7 @@ const markdown = new MarkdownIt({
     },
 })
 .use(require("markdown-it-named-code-blocks"))
+.use(require("markvis"))
 .use(require("markdown-it-anchor"))
 .use(require("markdown-it-toc-done-right"))
 .use(require("markdown-it-emoji", {
@@ -182,6 +183,7 @@ const markdown = new MarkdownIt({
 .use(require("@gerhobbelt/markdown-it-inline-text-color"))
 .use(require("markdown-it-complex-table").default)
 .use(require("markdown-it-small"))
+.use(require("markdown-it-bidi"))
 
 require("./markdown-plugin/container")(markdown)
 
@@ -303,8 +305,6 @@ document.addEventListener('keydown',  event => {
         switch(event.key.toLocaleUpperCase()) {
             case "N": ipcRenderer.send("openNewBlankFileWindow")
             break
-            case "O": showOpenFileDialog()
-            break
             case "S": {
                 if (!fileStatus.isTitled) {
                     showSaveFileDialog()
@@ -370,7 +370,7 @@ ipcRenderer.on("file-has-been-opened", (e, file) => {
 
 ipcRenderer.on("html-path-has-been-set", (e, file) => {    
     const dir = file.path
-    
+
     fileStatus.htmlPath = dir
     toSaveHtmlFile()
 })

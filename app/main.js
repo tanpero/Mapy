@@ -1,3 +1,4 @@
+console.time("Mapy")
 const { app, BrowserWindow, dialog, ipcMain, shell, nativeTheme, Menu } = require("electron")
 const path = require("node:path")
 const fs = require("fs")
@@ -22,7 +23,7 @@ const randomOffset = () => {
     return [signX * incrementX, signY * incrementY]
 }
 
-const createWindow = () => {
+const createWindow = exports.createWindow = () => {
 
     nativeTheme.themeSource = "dark"
 
@@ -43,7 +44,7 @@ const createWindow = () => {
 
     newWindow.webContents.loadFile(as('index.html'))
 
-    newWindow.once("ready-to-show", () => newWindow.show())
+    newWindow.once("ready-to-show", () => (newWindow.show(), console.timeEnd("Mapy")))
 
     newWindow.on("closed", () => {
         windows.delete(newWindow)
@@ -84,19 +85,14 @@ app.on("will-finish-launching", () => {
 })
 
 
-const openFile = module.exports.openFile = (targetWindow, path) => {
+const openFile = exports.openFile = (targetWindow, path) => {
     const content = fs.readFileSync(path).toString()
     app.addRecentDocument(path)
     targetWindow.setRepresentedFilename(path)
     targetWindow.webContents.send("file-has-been-opened", { path, content })
 }
 
-ipcMain.on("openNewBlankFileWindow", e => {
-    createWindow().focus()   
-})
-
-ipcMain.on("showOpenFileDialog", e => {
-    const win = BrowserWindow.getFocusedWindow()
+const openFileFromUser = exports.openFileFromUser = win => {
     dialog.showOpenDialog(win, {
         filters: [{
                 name: "Markdown",
@@ -115,6 +111,15 @@ ipcMain.on("showOpenFileDialog", e => {
             openFile(win, filePath)
         }
     })
+}
+
+ipcMain.on("openNewBlankFileWindow", e => {
+    createWindow().focus()   
+})
+
+ipcMain.on("showOpenFileDialog", e => {
+    const win = BrowserWindow.getFocusedWindow()
+    openFileFromUser(win)
 })
 
 ipcMain.on("showSaveFileDialog", e => {
