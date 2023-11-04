@@ -59,6 +59,16 @@ div {
     width: 80cqw;
 }
 
+.raw-markdown.drag-over {
+    background-color: rgb(181, 220, 216);
+    border-color: rgb(75, 160, 151);
+}
+
+.raw-markdown.drag-error {
+    background-color: rgba(170, 57, 57, 0.7);
+    border-color: rgba(255, 170, 170, 0.8);
+}
+
 ::-webkit-scrollbar {
     width: 5px;
     height: 0;

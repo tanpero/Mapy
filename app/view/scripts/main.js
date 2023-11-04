@@ -1,28 +1,31 @@
 const MarkdownIt = require("markdown-it")
 const hljs = require("highlight.js/lib/core")
 const {
-    showOpenFileDialog, showSaveFileDialog, showSaveHtmlFileDialog
+    showOpenFileDialog, showSaveFileDialog, showSaveHtmlFileDialog,
+    showFileHasBeenChangedAccidentally,
 } = require("./dialogs")
-const { defaultTheme, nextTheme } = require("./theme")
 const { extractFileName, generateHTML } = require("./text-util")
 const { ipcRenderer } = require("electron")
 const fs = require("fs")
 const path = require("path")
-//const { createWordCloudElement, removeWordCloudElement } = require("./word-cloud")
 const { clearInterval } = require("timers")
 const cm_lang_markdown = require("@codemirror/lang-markdown").markdown
+const { oneDark } = require("@codemirror/theme-one-dark")
 const { basicSetup, EditorView } = require("codemirror")
 const { EditorState } = require("@codemirror/state")
 const { outputPDF } = require("./output-pdf")
 
+const {
+    triggerBox, searchHighlightPlugin, setInputListener, removeInputListener
+} = require("./search-and-replace")
+
 const markdownWrapper = document.querySelector("#markdown")
 const htmlView = document.querySelector("#html")
+const searchBox = document.querySelector(".search")
+const searchInput = document.querySelector("#search")
+const isSearchBoxVisible = () => searchBox.style.display === "block"
 
-//const wordcloudContainer = document.getElementById("word-cloud")
-let hasWordCloud = false
-
-const { oneDark } = require("@codemirror/theme-one-dark")
-
+searchBox.style.display = "none"
 
 let updateHtml = () => {}
 let setMonitor = () => {}
@@ -38,7 +41,6 @@ const cm = new EditorView({
             EditorView.updateListener.of(e => {
                 updateHtml()
                 setMonitor()
-                fileStatus.editionAccumulator += 1
             })
         ],
         
@@ -65,6 +67,7 @@ let fileStatus = {
     fileName: "",
     _name: "",
     filePath: "",
+    htmlPath: "",
     get fileName() {
         return this._name
     },
@@ -92,7 +95,6 @@ let fileStatus = {
         appTitle.innerText = this.appTitleInfo.join("")
         this._saved = value
     },
-    editionAccumulator: 0,
 }
 
 /*
@@ -121,7 +123,7 @@ const markdown = new MarkdownIt({
     typographer: true,
     modifyToken (token, env) {
         switch (token.type) {
-        case "image": // set all images to 200px width
+        case "image":
             let _path = token.attrObj.src
             if (!isurl(_path) && !path.isAbsolute(_path)) {
                 token.attrObj.src = path.resolve(path.dirname(fileStatus.filePath), _path)
@@ -148,10 +150,13 @@ const markdown = new MarkdownIt({
     register: {
         cypher: require("highlightjs-cypher")
     },
-    inline: true,
 })
 .use(require("markdown-it-named-code-blocks"))
+<<<<<<< HEAD
 .use(require("markdown-it-image-caption"))
+=======
+.use(require("markvis"))
+>>>>>>> 558497990d4b5a547a1a82dca6abb1fe7cc1e1c7
 .use(require("markdown-it-anchor"))
 .use(require("markdown-it-toc-done-right"))
 .use(require("markdown-it-emoji", {
@@ -182,7 +187,13 @@ const markdown = new MarkdownIt({
 .use(require("@gerhobbelt/markdown-it-inline-text-color"))
 .use(require("markdown-it-complex-table").default)
 .use(require("markdown-it-small"))
+<<<<<<< HEAD
 .use(require("markdown-it-inject-linenumbers"))
+=======
+.use(require("markdown-it-bidi"))
+
+require("./markdown-plugin/container")(markdown)
+>>>>>>> 558497990d4b5a547a1a82dca6abb1fe7cc1e1c7
 
 // 指定 Bib 文件路径后可以在 Markdown 中使用 BibTex 语法
 const addBibtexSupport = bibPath => {
@@ -201,6 +212,7 @@ const renderMarkdownToHtml = source => {
 updateHtml = () => renderMarkdownToHtml(getMarkdown())
 
 
+require("./drag-drop")
 
 
 /*
@@ -223,25 +235,19 @@ const toSaveMarkdownFile = () => {
 
 
 const toSaveHtmlFile = () => {
-    if (fileStatus.isTitled) {
-        const html = htmlView.innerHTML
+    const content = generateHTML(htmlView.innerHTML)
 
-        const path = fileStatus.filePath.replace(/\.[^/.]+$/, ".html")
-        fs.writeFile(path, generateHTML(html), e => {
-            if (e) {
-                alert(e.message)
-            }
-        })
-        fileStatus.fileName = extractFileName(path)
+    if (!fileStatus.htmlPath) {
+        ipcRenderer.send("showSaveHtmlFileDialog")        
     } else {
-        showSaveHtmlFileDialog()
+        ipcRenderer.send("to-save-html", { filePath: fileStatus.htmlPath, content })
     }
 }
 
 
 const toSavePdfFile = () => {
     if (fileStatus.isTitled) {
-        const html = htmlView.innerHTML
+        const html = generateHTML(htmlView.innerHTML)
         const pdfPath = fileStatus.filePath.replace(/\.[^/.]+$/, ".pdf")
         outputPDF(html, pdfPath)
     } else {
@@ -293,13 +299,18 @@ setMonitor = () => {
  * 基本快捷键
  */
 
+let originalSource = ""
+
+searchInput.addEventListener("blur", () => {
+    if (isSearchBoxVisible()) triggerBox(searchBox, searchInput)
+})
+
+
 document.addEventListener('keydown',  event => {
 
     if (event.ctrlKey) {
         switch(event.key.toLocaleUpperCase()) {
-            case "N": () => ipcRenderer.send("openNewBlankFileWindow")
-            break
-            case "O": showOpenFileDialog()
+            case "N": ipcRenderer.send("openNewBlankFileWindow")
             break
             case "S": {
                 if (!fileStatus.isTitled) {
@@ -309,6 +320,21 @@ document.addEventListener('keydown',  event => {
                 toSaveHtmlFile()
             }
             break
+            case "F": {
+
+                // 刚按下 Ctrl-F
+                // 若此时搜索框不可见
+                // 说明即将启动搜索框，对原始文本存档
+                if (!isSearchBoxVisible()) {
+                    originalSource = getMarkdown()
+                } else {
+                    setMarkdown(originalSource)
+                }
+                triggerBox(searchBox, searchInput) ?
+                        setInputListener(searchInput, getMarkdown, markdown.render)
+                                : removeInputListener(setInputListener)
+                break
+            }
             case "P": toSavePdfFile()
             break
             case "W": {
@@ -339,7 +365,7 @@ document.addEventListener('keydown',  event => {
  * 响应交互事件
  */
 
-ipcRenderer.on("open-file", (e, file) => {
+ipcRenderer.on("file-has-been-opened", (e, file) => {
     fileStatus.filePath = file.path
     fileStatus.fileName = extractFileName(file.path)
     setMarkdown(file.content)
@@ -349,12 +375,14 @@ ipcRenderer.on("open-file", (e, file) => {
     e.sender.send("set-pwd")
 })
 
+ipcRenderer.on("html-path-has-been-set", (e, file) => {    
+    const dir = file.path
+
+    fileStatus.htmlPath = dir
+    toSaveHtmlFile()
+})
 
 ipcRenderer.on("save-file", (e, file) => {
-    const dir = path.dirname(file.path)
-    if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir, { recursive: true })
-    }
     fs.writeFile(file.path, getMarkdown(), e => {
         if (e) {
             alert(e.message)
@@ -366,39 +394,21 @@ ipcRenderer.on("save-file", (e, file) => {
     appTitle.innerText = fileStatus.appTitleInfo.join("")
 })
 
-ipcRenderer.on("save-html-file", e => {
-    const dir = path.dirname(file.path)
-    if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir, { recursive: true })
-    }
-    fs.writeFile(file.path, generateHTML(htmlView.innerHTML), e => {
-        if (e) {
-            alert(e.message)
-        }
-    })
+let externalEditedContent = ""
+
+ipcRenderer.on("file-has-been-changed", (e, file, content) => {
+    fileStatus.isSaved = false
+    clearInterval(monitorID)
+    ipcRenderer.send("showFileHasBeenChangedAccidentally")
+    externalEditedContent = content
 })
 
-
-// TODO: 更换界面主题
-// 涉及到 Electron API 的一些问题，暂时无法实现
-
-
-
-/*
- * TODO: 拖拽文件
- */
-
-markdownView.addEventListener("drop", e => {
-    e.preventDefault()
-
-    for (const file of e.dataTransfer.files) {
-        if (file.type.startsWith("text/")) {
-            const reader = new FileReader()
-            reader.addEventListener("load", () => markdownView.innerText = reader.result)
-            reader.readAsText(file)
-        }
-    }
+ipcRenderer.on("reload-external-edit", e => {
+    fileStatus.isSaved = true
+    setMarkdown(externalEditedContent)
 })
 
-markdownView.addEventListener("dragover", e => e.preventDefault())
-
+ipcRenderer.on("overwrite-external-edit", e => {
+    fileStatus.isSaved = true
+    toSaveMarkdownFile()
+})

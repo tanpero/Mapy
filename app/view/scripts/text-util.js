@@ -1,3 +1,63 @@
+const fs = require("fs")
+const path = require("path")
+
+let style = 
+`
+        body {
+            background-color: #23241f;
+            color: antiquewhite;
+            padding: 1em;
+            max-width: 50%;
+            flex-grow: 1;
+            overflow-y: scroll;
+            font-size: 16px;
+            letter-spacing: 1px;
+            line-height: 1.5;
+            text-indent: 2em;
+            text-align: left;
+            word-break: break-all;
+            width: 80cqw;
+        }
+            
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 0;
+        }
+
+        ::-webkit-scrollbar-track {
+            background-color: rgb(40, 44, 52)
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: #abb09f;
+        }
+
+`
+
+fs.readFile(path.join(__dirname, "..", "styles", "article.css"), "utf8", (e, data) => {
+    style += data
+})
+
+fs.readFile(path.join(__dirname, "..", "styles", "codeblock.css"), "utf8", (e, data) => {
+    style += data
+})
+
+fs.readFile(path.join(__dirname, "..", "styles", "detail-tag.css"), "utf8", (e, data) => {
+    style += data
+})
+
+fs.readFile(path.join(__dirname, "..", "..", "..", "node_modules", "highlight.js", "styles", "monokai-sublime.min.css"), "utf8", (e, data) => {
+    style += data
+})
+
+fs.readFile(path.join(__dirname, "..", "..", "..", "node_modules", "katex", "dist", "katex.min.css"), "utf8", (e, data) => {
+    style += data
+})
+
+fs.readFile(path.join(__dirname, "..", "..", "..", "node_modules", "markdown-it-texmath", "css", "texmath.css"), "utf8", (e, data) => {
+    style += data
+})
+
 const extractFileName = filePath => {
     
     // 使用正斜杠或反斜杠作为分隔符来匹配文件名
@@ -74,27 +134,42 @@ const getTitleFromHtml = doc => {
     return text
 }
 
-function formatNode (node /* = doc.body */, indent = "    ") {
-    let output = `${indent}<${node.nodeName.toLowerCase()}`
-    if (node.attributes && node.attributes.length > 0) {
-        output += " " + Array.from(node.attributes).map(
-                    attr => `${attr.name.toLowerCase()}="${attr.value}"`).join(" ")
-    }
-    if (node.childNodes && node.childNodes.length > 0) {
-        output += ">\n";
+function formatNode(node, indent = "") {
+    let output = indent
+    if (node.nodeName.toLowerCase() === "body") {
         for (let i = 0; i < node.childNodes.length; i++) {
             const childNode = node.childNodes[i]
             if (childNode.nodeType === Node.ELEMENT_NODE) {
                 output += formatNode(childNode, indent + "    ")
             } else if (childNode.nodeType === Node.TEXT_NODE) {
-                output += `${indent}${childNode.textContent}\n`
+                output += indent + childNode.textContent
             }
         }
-        output += `${indent}</${node.nodeName.toLowerCase()}>`
+        return output
     } else {
-        output += "/>"
+        const tagName = node.nodeName.toLowerCase();
+        let output = `${indent}<${node.nodeName.toLowerCase()}`;
+        if (node.attributes && node.attributes.length > 0) {
+            output += " " + Array.from(node.attributes).map(
+                attr => `${attr.name.toLowerCase()}="${attr.value}"`
+            ).join(" ")
+        }
+        if (node.childNodes && node.childNodes.length > 0) {
+            output += ">\n"
+            for (let i = 0; i < node.childNodes.length; i++) {
+                const childNode = node.childNodes[i]
+                if (childNode.nodeType === Node.ELEMENT_NODE) {
+                    output += formatNode(childNode, indent + "    ")
+                } else if (childNode.nodeType === Node.TEXT_NODE) {
+                    output += `${indent}${childNode.textContent}\n`
+                }
+            }
+            output += `${indent}</${node.nodeName.toLowerCase()}>\n`
+        } else {
+            output += "/>\n"
+        }
+        return output
     }
-    return output
 }
 
 const generateHTML = content => {
@@ -103,6 +178,7 @@ const generateHTML = content => {
     const doc = parser.parseFromString(content, "text/html")
     const title = getTitleFromHtml(doc)
     const formattedContent = formatNode(doc.body)
+
     const text =
     `
 <!DOCTYPE html>
@@ -111,9 +187,16 @@ const generateHTML = content => {
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="Note document - ${date}">
+        <style>
+            ${style}
+        </style>
         <title>${title}</title>
     </head>
-${formattedContent}
+    <body>
+        <div class="content">
+        ${formattedContent}
+        </div>
+    </body>
 </html>
 `
     return text
