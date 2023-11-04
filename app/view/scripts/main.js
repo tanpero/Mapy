@@ -174,6 +174,7 @@ const markdown = new MarkdownIt({
 .use(require("markdown-it-adobe-plugin"))
 .use(require("markdown-it-front-matter"))
 .use(require("markdown-it-checkbox"))
+.use(require("@luckrya/markdown-it-link-to-card").linkToCardPlugin)
 .use(require("markdown-it-ins"))
 .use(require("markdown-it-abbr"))
 .use(require("markdown-it-mark"))
