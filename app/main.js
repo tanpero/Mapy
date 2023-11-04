@@ -1,7 +1,8 @@
-const { app, BrowserWindow, dialog, ipcMain, shell, nativeTheme } = require("electron")
+console.time("Mapy")
+const { app, BrowserWindow, dialog, ipcMain, shell, nativeTheme, Menu } = require("electron")
 const path = require("node:path")
 const fs = require("fs")
-const HotKey = require("hotkeys-js")
+const applicationMenu = require("./application-menu")
 const as = fileName => path.join('app', 'view', fileName)
 
 const windowInitSettings = {
@@ -17,12 +18,12 @@ const windows = new Set()
 const randomOffset = () => {
     let signX = Math.random() >= 0.5 ? 1 : -1    
     let signY = Math.random() >= 0.5 ? 1 : -1
-    let incrementX = Math.random() * 10
-    let incrementY = Math.random() * 10
-    return [signX * (10 + incrementX), signY * (10 + incrementY)]
+    let incrementX = Math.random() * 100
+    let incrementY = Math.random() * 100
+    return [signX * incrementX, signY * incrementY]
 }
 
-const createWindow = () => {
+const createWindow = exports.createWindow = () => {
 
     nativeTheme.themeSource = "dark"
 
@@ -43,10 +44,11 @@ const createWindow = () => {
 
     newWindow.webContents.loadFile(as('index.html'))
 
-    newWindow.once("ready-to-show", () => newWindow.show())
+    newWindow.once("ready-to-show", () => (newWindow.show(), console.timeEnd("Mapy")))
 
     newWindow.on("closed", () => {
         windows.delete(newWindow)
+        stopWatchingFile(newWindow)
         newWindow = null
     })
 
@@ -59,33 +61,39 @@ const createWindow = () => {
     return newWindow
 }
 
-app.whenReady().then(createWindow)
+app.whenReady().then(() => {
+    Menu.setApplicationMenu(applicationMenu)
+    createWindow()
+})
 
 app.on("activate", (e, hasVisibleWindows) => !hasVisibleWindows && createWindow())
 
 app.on("window-all-closed", () => process.platform !== "darwin" && app.quit())
 
+app.on("open-file", (event, filePath) => {
+    const targetWindow = windows.values().next().value
+    openFile(targetWindow, filePath)
+})
 
-ipcMain.on("openNewBlankFileWindow", (e, options) => {
-    let newWindow = new BrowserWindow(windowInitSettings)
-
-    newWindow.webContents.loadFile(as('index.html'))
-    newWindow.once("ready-to-show", () => newWindow.show())
-
-    newWindow.on("closed", () => newWindow = null)
-
-    if (options?.filePath) {
-        newWindow.webContents.on("did-finish-load", () => {
-            e.reply("append-file-path", options.filePath) // 将 "hello world" 消息发送给渲染进程
+app.on("will-finish-launching", () => {
+    app.on("open-file", (e, file) => {
+        const win = createWindow()
+        win.once("ready-to-show", () => {
+            openFile(win, file)
         })
-    }
-    
+    })
 })
 
 
+const openFile = exports.openFile = (targetWindow, path) => {
+    const content = fs.readFileSync(path).toString()
+    app.addRecentDocument(path)
+    targetWindow.setRepresentedFilename(path)
+    targetWindow.webContents.send("file-has-been-opened", { path, content })
+}
 
-ipcMain.on("showOpenFileDialog", e => {
-    dialog.showOpenDialog(BrowserWindow.getFocusedWindow(), {
+const openFileFromUser = exports.openFileFromUser = win => {
+    dialog.showOpenDialog(win, {
         filters: [{
                 name: "Markdown",
                 extensions: ["md", "markdown"]
@@ -100,20 +108,25 @@ ipcMain.on("showOpenFileDialog", e => {
     }).then(result => {
         if (!result.canceled) {
             const filePath = result.filePaths[0]
-            const fileContent = fs.readFileSync(filePath, "utf-8")
-            e.reply("open-file", {
-                path: filePath,
-                content: fileContent
-            })
+            openFile(win, filePath)
         }
     })
+}
+
+ipcMain.on("openNewBlankFileWindow", e => {
+    createWindow().focus()   
+})
+
+ipcMain.on("showOpenFileDialog", e => {
+    const win = BrowserWindow.getFocusedWindow()
+    openFileFromUser(win)
 })
 
 ipcMain.on("showSaveFileDialog", e => {
     dialog.showSaveDialog(BrowserWindow.getFocusedWindow(), {
         filters: [
             { 
-                name: "Markdown 文件",
+                name: "Markdown",
                 extensions: ["md", "markdown"]
             }, {
                 name: "所有文件",
@@ -132,6 +145,8 @@ ipcMain.on("showSaveFileDialog", e => {
 
 ipcMain.on("showSaveHtmlFileDialog", e => {
     dialog.showSaveDialog(BrowserWindow.getFocusedWindow(), {
+        title: "保存预览",
+        defaultPath: app.getPath("desktop"),
         filters: [
             { 
                 name: "HTML 文件",
@@ -144,10 +159,58 @@ ipcMain.on("showSaveHtmlFileDialog", e => {
     }).then(result => {
         if (!result.canceled) {
             const filePath = result.filePath
-            e.reply("save-html-file", {
+            e.reply("html-path-has-been-set", {
                 path: filePath
             })
         }
     })
 })
 
+ipcMain.on("to-save-html", (e, { filePath, content }) => {
+    console.log(filePath)
+    fs.writeFileSync(filePath, content, "utf-8", e => { if (e) console.error(e) })
+})
+
+
+/*
+ * 文件变动监控
+ */
+
+const openFiles = new Map()
+
+const startWatchingFile = (targetWindow, file) => {
+    stopWatchingFile(targetWindow)
+
+    const watcher = fs.watch(file, e => {
+        if (e === "change") {
+            const content = fs.readFileSync(file)
+            targetWindow.webContents.send("file-has-been-changed", file, content)
+        }
+    })
+
+    openFiles.set(targetWindow, watcher)
+}
+
+const stopWatchingFile = targetWindow => {
+    if (openFiles.has(targetWindow)) {
+        openFiles.get(targetWindow).stop()
+        openFiles.delete(targetWindow)
+    }
+}
+
+ipcMain.on("showFileHasBeenChangedAccidentally", e => {
+    dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {
+        type: "warning",
+        title: "需要注意的情况 😮",
+        message: "文件被外部程序修改了!🤦‍♀️\n是否仍然保存？💁‍♀️",
+        buttons: ["是的", "不"],
+        defaultId: 0,
+        cancelId: 1
+    }).then(result => {
+        if (result.response === 0) {
+            e.reply("overwrite-external-edit")
+        } else {
+            e.reply("reload-external-edit")
+        }
+    })
+})

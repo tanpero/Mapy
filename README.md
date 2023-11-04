@@ -11,6 +11,7 @@
 </div>
 
 
+
 ## Usage
 
 - 启动：
@@ -22,12 +23,13 @@
   ```
 
 - 构建：
-  ```bash
-  git clone https://github.com/tanpero/Mapy.git
-  cd Mapy
-  npm install
-  npm run dist
-  ```
+
+```bash
+git clone https://github.com/tanpero/Mapy.git
+cd Mapy
+npm install
+npm run dist
+```
 
 ## Goals
 
@@ -71,7 +73,7 @@
 - [ ] 对于不同规模的文本，实现相对美观和一致的词云呈现外观
 - [x] 当链接被单击时，在默认浏览器打开
 - [ ] 支持内容查找替换
-- [ ] 美化实时预览内容及 HTML 文件的显示风格
+- [x] 美化实时预览内容及 HTML 文件的显示风格
 - [ ] 支持拖拽导入图片和 Markdown 文件
 - [ ] 添加丰富的格式快捷键
 - [ ] 实现预览区和编辑区的同步滚动
@@ -90,6 +92,27 @@
 - [ ] 笔记可复制为微信公众号、知乎、简书、掘金、Lofter 等平台编辑器直接可用的格式
 - [ ] 笔记可整合为幻灯片（基于 `Reveal.js`）
 - [ ] 笔记可拆分为记忆卡片
+
+## THANKS
+
+
+目前为止，Mapy 的实现基于下列重要的项目。
+
+感谢开源作者们的出色工作！
+
+::: center
+
+| 名称        | 作者                                |
+| ----------- | ----------------------------------- |
+| **Electron**    | 赵成 *(中国，杭州)*                   |
+| **CodeMirror**  | Marijn Haverbeke *(German, Berlin)*   |
+| **Markdown-It** | Vitaly Puzrin *(Israel, Nof haGalil)* |
+| **KaTeX**       | Khan Academy                          |
+| **HighlightJS** | Ivan Sagalaev *(USA, Sammamish)*      |
+| **D3**          | Mike Bostock *(USA, San Francisco)*   |
+| **jsPDF**       | James Hall *(UK, Leeds)*              |
+
+:::
 
 ## [LICENSE](./LICENSE)
 

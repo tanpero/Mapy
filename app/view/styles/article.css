@@ -67,7 +67,22 @@ code .line-num:last-of-type {
     text-decoration: none;
     color: gray;
 }
-  
+
+div .left {
+    text-align: left;
+}
+
+div .center {
+    text-align: center;
+}
+
+div .right {
+    text-align: right;
+}
+
+h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
+    text-decoration: none;
+}
 
 .raw-markdown > p, blockquote {
     display: inline-block;
@@ -81,6 +96,10 @@ code .line-num:last-of-type {
 
 eq, code, li {
     text-indent: 0;
+}
+
+mark {
+    border-radius: 3px;
 }
 
 #word-cloud {
@@ -117,3 +136,45 @@ h1, h2, h3, h4, h5, h6 {
 h1:hover, h2:hover, h3:hover, h4:hover, h5:hover, h6:hover {
     border-color: powderblue;
 }
+
+
+table {
+    margin-left: 2rem;
+    margin-right: 2rem;
+    border-collapse: collapse;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(147, 226, 255, 0.5)
+}
+th, td {
+    padding: 15px;
+    background-color: rgba(255,255,255,0.2);
+    color: #fff;
+}
+th {
+    text-align: center;
+}
+thead th {
+    background-color: #55608f;
+}
+tbody tr:hover {
+    background-color: rgba(255,255,255,0.3);
+}
+tbody td {
+    position: relative;
+}
+tbody td:hover:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -9999px;
+    bottom: -9999px;
+    background-color: rgba(255,255,255,0.2);
+    z-index: -1;
+}
+
+.rendered-html ::selection {
+    background-color: rgb(133, 200, 239); 
+    color: rgb(255, 81, 0)
+}
+
