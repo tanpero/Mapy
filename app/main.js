@@ -1,7 +1,6 @@
 const { app, BrowserWindow, dialog, ipcMain, shell, nativeTheme } = require("electron")
 const path = require("node:path")
 const fs = require("fs")
-const HotKey = require("hotkeys-js")
 const as = fileName => path.join('app', 'view', fileName)
 
 const windowInitSettings = {

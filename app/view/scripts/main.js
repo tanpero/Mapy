@@ -151,6 +151,7 @@ const markdown = new MarkdownIt({
     inline: true,
 })
 .use(require("markdown-it-named-code-blocks"))
+.use(require("markdown-it-image-caption"))
 .use(require("markdown-it-anchor"))
 .use(require("markdown-it-toc-done-right"))
 .use(require("markdown-it-emoji", {
@@ -181,6 +182,7 @@ const markdown = new MarkdownIt({
 .use(require("@gerhobbelt/markdown-it-inline-text-color"))
 .use(require("markdown-it-complex-table").default)
 .use(require("markdown-it-small"))
+.use(require("markdown-it-inject-linenumbers"))
 
 // 指定 Bib 文件路径后可以在 Markdown 中使用 BibTex 语法
 const addBibtexSupport = bibPath => {
