@@ -178,3 +178,21 @@ tbody td:hover:before {
     color: rgb(255, 81, 0)
 }
 
+aside {
+    font-size: 80%;
+    position: relative;
+}
+/* Wide viewport */
+@media (min-width: 1400px) {
+    aside {
+        float: right;
+        clear: right;
+        margin-right: -23vw;
+        text-align: left;
+
+        top: -3rem;
+        width: 20vw;
+        margin-top: 1rem;
+    }
+}
+

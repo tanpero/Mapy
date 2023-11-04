@@ -4,7 +4,7 @@
   "description": "A Markdown Editor and Viewer.",
   "main": "app/main.js",
   "scripts": {
-    "start": "electron .",
+    "start": "clear && electron .",
     "dist": "electron-builder"
   },
   "build": {
@@ -63,6 +63,7 @@
     "markdown-it-bidi": "^0.1.0",
     "markdown-it-checkbox": "^1.1.0",
     "markdown-it-collapsible": "^2.0.0",
+    "markdown-it-colorful-checkbox": "^1.0.2",
     "markdown-it-complex-table": "^1.0.0",
     "markdown-it-container": "^3.0.0",
     "markdown-it-easy-tables": "^0.1.1",
@@ -75,6 +76,7 @@
     "markdown-it-html5-media": "^0.7.1",
     "markdown-it-image-caption": "^1.0.0",
     "markdown-it-implicit-figures": "^0.12.0",
+    "markdown-it-implicit-figures-video": "^0.10.1",
     "markdown-it-imsize": "^2.0.1",
     "markdown-it-include": "^2.0.0",
     "markdown-it-inject-linenumbers": "^0.3.0",
@@ -90,12 +92,12 @@
     "markdown-it-replace-it": "^1.0.0",
     "markdown-it-replace-link": "^1.2.0",
     "markdown-it-ruby": "^0.1.1",
+    "markdown-it-sidenote": "^4.1.0",
     "markdown-it-small": "^1.0.0",
     "markdown-it-smartarrows": "^1.0.1",
     "markdown-it-sub": "^1.0.0",
     "markdown-it-sup": "^1.0.0",
     "markdown-it-table": "^4.1.1",
-    "markdown-it-task-lists": "^2.1.1",
     "markdown-it-texmath": "^1.0.0",
     "markdown-it-textual-uml": "^0.16.0",
     "markdown-it-toc-done-right": "^4.2.0",

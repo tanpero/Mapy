@@ -1,0 +1,34 @@
+.task-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.c-checkbox {
+  background-color: #fff;
+  border: solid 1px #ec8080;
+  border-radius: 4px;
+  display: inline-block;
+  height: 16px;
+  margin-right: 6px;
+  margin-left: 2px;
+  text-align: center;
+  width: 16px;
+  vertical-align: middle;
+}
+
+.c-svg {
+  margin-bottom: 5px;
+  stroke: #fff;
+  width:12px;
+  height:12px;
+}
+
+.c-positive {
+  background-color: #4aca65;
+  border-color: #43b45b;
+}
+
+.c-negative {
+  background-color: #b8b7b7;
+  border-color: #6d6d6d;
+}

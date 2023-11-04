@@ -24,12 +24,12 @@
 
 - 构建：
 
-```bash
-git clone https://github.com/tanpero/Mapy.git
-cd Mapy
-npm install
-npm run dist
-```
+    ```bash
+    git clone https://github.com/tanpero/Mapy.git
+    cd Mapy
+    npm install
+    npm run dist
+    ```
 
 ## Goals
 
@@ -55,6 +55,8 @@ npm run dist
 - [x] 行内公式和公式块
 - [x] 待办清单
 - [x] 展开与折叠信息
+- [x] 脚注与旁批
+- [x] 灵活的样式容器 
 
 ## Roadmap
 
@@ -81,7 +83,6 @@ npm run dist
 - [ ] 重构用户界面，使用更合理的方式呈现词云，笔记以 `tab` 页显示
 - [ ] 实现笔记管理功能，支持分类和添加标签
 - [ ] 正确呈现按日统计的写作频率热力图和笔记词云
-- [ ] 正确生成 PDF
 - [ ] 实现界面主题外观
 - [ ] 支持根据笔记分类、标题和内部链接生成知识图谱，并根据知识图谱追溯笔记
 - [ ] 支持使用 `AsciiDoc`、`reStructureText`、`Org-Mode` 和 `Textile` 等标记格式编写笔记

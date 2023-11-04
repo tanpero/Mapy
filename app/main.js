@@ -2,10 +2,7 @@ console.time("Mapy")
 const { app, BrowserWindow, dialog, ipcMain, shell, nativeTheme, Menu } = require("electron")
 const path = require("node:path")
 const fs = require("fs")
-<<<<<<< HEAD
-=======
 const applicationMenu = require("./application-menu")
->>>>>>> 558497990d4b5a547a1a82dca6abb1fe7cc1e1c7
 const as = fileName => path.join('app', 'view', fileName)
 
 const windowInitSettings = {
@@ -170,7 +167,6 @@ ipcMain.on("showSaveHtmlFileDialog", e => {
 })
 
 ipcMain.on("to-save-html", (e, { filePath, content }) => {
-    console.log(filePath)
     fs.writeFileSync(filePath, content, "utf-8", e => { if (e) console.error(e) })
 })
 

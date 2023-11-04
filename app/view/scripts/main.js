@@ -127,7 +127,7 @@ const markdown = new MarkdownIt({
             let _path = token.attrObj.src
             if (!isurl(_path) && !path.isAbsolute(_path)) {
                 token.attrObj.src = path.resolve(path.dirname(fileStatus.filePath), _path)
-                
+                console.log(token.attrObj.src)
             }
             break
         case "link_open":
@@ -152,11 +152,8 @@ const markdown = new MarkdownIt({
     },
 })
 .use(require("markdown-it-named-code-blocks"))
-<<<<<<< HEAD
 .use(require("markdown-it-image-caption"))
-=======
-.use(require("markvis"))
->>>>>>> 558497990d4b5a547a1a82dca6abb1fe7cc1e1c7
+.use(require("markdown-it-html5-media").html5Media)
 .use(require("markdown-it-anchor"))
 .use(require("markdown-it-toc-done-right"))
 .use(require("markdown-it-emoji", {
@@ -171,7 +168,7 @@ const markdown = new MarkdownIt({
     multibody:  true,
     aotolabel:  true,
 })
-.use(require("markdown-it-task-lists"))
+.use(require("markdown-it-colorful-checkbox"))
 .use(require("markdown-it-collapsible"))
 .use(require("markdown-it-ruby"))
 .use(require("markdown-it-adobe-plugin"))
@@ -184,16 +181,14 @@ const markdown = new MarkdownIt({
 .use(require("markdown-it-sub"))
 .use(require("markdown-it-sup"))
 .use(require("markdown-it-footnote"))
+.use(require("markdown-it-sidenote"))
 .use(require("@gerhobbelt/markdown-it-inline-text-color"))
 .use(require("markdown-it-complex-table").default)
 .use(require("markdown-it-small"))
-<<<<<<< HEAD
-.use(require("markdown-it-inject-linenumbers"))
-=======
 .use(require("markdown-it-bidi"))
+.use(require("markdown-it-inject-linenumbers"))
 
 require("./markdown-plugin/container")(markdown)
->>>>>>> 558497990d4b5a547a1a82dca6abb1fe7cc1e1c7
 
 // 指定 Bib 文件路径后可以在 Markdown 中使用 BibTex 语法
 const addBibtexSupport = bibPath => {
@@ -310,8 +305,6 @@ document.addEventListener('keydown',  event => {
 
     if (event.ctrlKey) {
         switch(event.key.toLocaleUpperCase()) {
-            case "N": ipcRenderer.send("openNewBlankFileWindow")
-            break
             case "S": {
                 if (!fileStatus.isTitled) {
                     showSaveFileDialog()

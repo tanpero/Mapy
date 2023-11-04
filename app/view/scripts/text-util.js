@@ -46,6 +46,8 @@ fs.readFile(path.join(__dirname, "..", "styles", "detail-tag.css"), "utf8", (e, 
     style += data
 })
 
+/*
+ * TODO...
 fs.readFile(path.join(__dirname, "..", "..", "..", "node_modules", "highlight.js", "styles", "monokai-sublime.min.css"), "utf8", (e, data) => {
     style += data
 })
@@ -57,7 +59,7 @@ fs.readFile(path.join(__dirname, "..", "..", "..", "node_modules", "katex", "dis
 fs.readFile(path.join(__dirname, "..", "..", "..", "node_modules", "markdown-it-texmath", "css", "texmath.css"), "utf8", (e, data) => {
     style += data
 })
-
+*/
 const extractFileName = filePath => {
     
     // 使用正斜杠或反斜杠作为分隔符来匹配文件名
@@ -145,6 +147,7 @@ function formatNode(node, indent = "") {
                 output += indent + childNode.textContent
             }
         }
+        
         return output
     } else {
         const tagName = node.nodeName.toLowerCase();
@@ -170,6 +173,7 @@ function formatNode(node, indent = "") {
         }
         return output
     }
+    
 }
 
 const generateHTML = content => {
