@@ -156,6 +156,7 @@ const markdown = new MarkdownIt({
 .use(require("markdown-it-html5-media").html5Media)
 .use(require("markdown-it-anchor"))
 .use(require("markdown-it-toc-done-right"))
+.use(require("markdown-it-fontawesome"))
 .use(require("markdown-it-emoji", {
     "smile": [ ":)", ":-)" ],
     "laughing": ":D",
