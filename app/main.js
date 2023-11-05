@@ -23,7 +23,7 @@ const randomOffset = () => {
     return [signX * incrementX, signY * incrementY]
 }
 
-const createWindow = exports.createWindow = () => {
+const createWindow = exports.createWindow = (file = "index.html", windowConfigure) => {
 
     nativeTheme.themeSource = "dark"
 
@@ -39,10 +39,18 @@ const createWindow = exports.createWindow = () => {
     }
 
     let newWindow = new BrowserWindow(Object.assign(windowInitSettings, {
-        x, y, show: false
+        x, y, show: false,
+        autoHideMenuBar: !!windowConfigure,
     }))
 
-    newWindow.webContents.loadFile(as('index.html'))
+    newWindow.webContents.loadFile(as(file))
+
+    if (windowConfigure) {
+        windowConfigure(newWindow)
+    }
+
+    Menu.setApplicationMenu(applicationMenu)
+
 
     newWindow.once("ready-to-show", () => (newWindow.show(), console.timeEnd("Mapy")))
 
@@ -61,8 +69,7 @@ const createWindow = exports.createWindow = () => {
     return newWindow
 }
 
-app.whenReady().then(() => {
-    Menu.setApplicationMenu(applicationMenu)
+app.whenReady().then(() => {    
     createWindow()
 })
 
@@ -83,6 +90,12 @@ app.on("will-finish-launching", () => {
         })
     })
 })
+
+const showAboutWindow = exports.showAboutWindow = () => {
+    createWindow("about.html", window => {
+        window.setTitle("关于 Mapy")
+    })
+}
 
 
 const openFile = exports.openFile = (targetWindow, path) => {

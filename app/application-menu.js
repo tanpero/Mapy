@@ -80,13 +80,7 @@ const template = [
                 label: "关于项目",
                 click (item, focusedWindow) {
                     if (focusedWindow) {
-                        dialog.showMessageBox(focusedWindow, {
-                            type: "info",
-                            title: "关于项目",
-                            message: "Mapy - 0.1.0",
-                            buttons: ["好的"],
-                            defaultId: 0,
-                        })
+                        mainProcess.showAboutWindow()
                     }
                 }
             }
