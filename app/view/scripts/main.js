@@ -151,6 +151,7 @@ const markdown = new MarkdownIt({
 .use(require("markdown-it-named-code-blocks"))
 .use(require("markdown-it-image-caption"))
 .use(require("markdown-it-html5-media").html5Media)
+.use(require("markdown-it-implicit-figures-video"))
 .use(require("markdown-it-anchor"))
 .use(require("markdown-it-toc-done-right"))
 .use(require("markdown-it-emoji", {
