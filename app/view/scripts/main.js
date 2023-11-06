@@ -4,7 +4,7 @@ const {
     showOpenFileDialog, showSaveFileDialog, showSaveHtmlFileDialog,
     showFileHasBeenChangedAccidentally,
 } = require("./dialogs")
-const { extractFileName, generateHTML } = require("./text-util")
+const { extractFileName, generateHTML, isURL } = require("./text-util")
 const { ipcRenderer } = require("electron")
 const fs = require("fs")
 const path = require("path")
@@ -112,9 +112,7 @@ hljs.addPlugin({
     }
 })
 
-const isurl = require("isurl")
 const meetHeading = require("./markdown-plugin/heading")
-
 
 const markdown = new MarkdownIt({
     html: true,
@@ -125,9 +123,8 @@ const markdown = new MarkdownIt({
         switch (token.type) {
         case "image":
             let _path = token.attrObj.src
-            if (!isurl(_path) && !path.isAbsolute(_path)) {
-                token.attrObj.src = path.resolve(path.dirname(fileStatus.filePath), _path)
-                console.log(token.attrObj.src)
+            if (!isURL(_path) && !path.isAbsolute(_path)) {
+                token.attrObj.src = path.resolve(fileStatus.filePath, _path)
             }
             break
         case "link_open":

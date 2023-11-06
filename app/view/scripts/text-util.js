@@ -150,7 +150,6 @@ function formatNode(node, indent = "") {
         
         return output
     } else {
-        const tagName = node.nodeName.toLowerCase();
         let output = `${indent}<${node.nodeName.toLowerCase()}`;
         if (node.attributes && node.attributes.length > 0) {
             output += " " + Array.from(node.attributes).map(
@@ -239,7 +238,10 @@ const simplifyIndent = preTagId => {
     // 将修改后的代码重新赋值给 pre 标签
     preTag.innerHTML = codeLines.join('\n')
 }
-  
+
+
+const isURL = text =>
+    /^((http[s]?|ftp):\/)?\/?([^\/\s]+)((\/\w+)*\/)([\w\-\.]+[^#?\s]+)(.*)?(#[\w\-]+)?$/iu.test(text)
 
 module.exports = {
     extractFileName,
@@ -247,4 +249,5 @@ module.exports = {
     filterMarkdown,
     generateHTML,
     simplifyIndent,
+    isURL,
 }
