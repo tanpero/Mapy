@@ -68,7 +68,7 @@
 .m-mdic-copy-wrapper {
     position: absolute;
     top: 16px;
-    right: 16px;
+    right: 20px;
 }
 .m-mdic-copy-wrapper span.u-mdic-copy-code_lang {
     position: absolute;
@@ -119,3 +119,52 @@
 .m-mdic-copy-wrapper button.u-mdic-copy-btn:hover {
     opacity: 1;
 }
+
+.code-tabs {
+    border: 3px solid #f0f0f0;
+    border-radius: 5px;
+}
+.code-tabs pre, .code-tabs input {
+    display: none;
+}
+.code-tabs input:checked + pre {
+    display: block;
+}
+.code-tabs label {
+    color: #bfbfbf;
+}
+.code-tabs input:checked + label {
+    color: #5c7f31;
+}
+.code-tabs ul {
+    font-size: 0;
+    padding: 0;
+    white-space: nowrap;
+    overflow: auto;
+    user-select: none;
+    border-radius: 5px;
+    border-bottom: 3px solid #f0f0f0;
+}
+.code-tabs li {
+    list-style: none;
+    display: inline-block;
+    position: relative;
+}
+.code-tabs label {
+    cursor: pointer;
+    user-select: none;
+    display: inline-block;
+    padding: 2px 5px;
+    margin: 5px;
+    font-size: 14px;
+}
+.code-tabs li ~ li::before {
+    content: "";
+    height: 12px;
+    width: 1px;
+    background: #bfbfbf;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+  

@@ -154,6 +154,7 @@ const markdown = new MarkdownIt({
     failText: "复制失败",
     successText: "复制成功",
 })
+.use(require("markdown-it-codetabs"))
 .use(require("markdown-it-image-caption"))
 .use(require("markdown-it-html5-media").html5Media)
 .use(require("markdown-it-anchor"))
