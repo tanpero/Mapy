@@ -124,7 +124,7 @@ const markdown = new MarkdownIt({
         case "image":
             let _path = token.attrObj.src
             if (!isURL(_path) && !path.isAbsolute(_path)) {
-                token.attrObj.src = path.resolve(fileStatus.filePath, _path)
+                token.attrObj.src = path.resolve(path.dirname(fileStatus.filePath), _path)
             }
             break
         case "link_open":
@@ -168,6 +168,9 @@ const markdown = new MarkdownIt({
     multibody:  true,
     aotolabel:  true,
 })
+.use(require("markdown-it-relativelink")({
+
+}))
 .use(require("markdown-it-colorful-checkbox"))
 .use(require("markdown-it-collapsible"))
 .use(require("markdown-it-ruby"))
@@ -191,8 +194,6 @@ const markdown = new MarkdownIt({
 .use(require("markdown-it-small"))
 .use(require("markdown-it-bidi"))
 .use(require("markdown-it-inject-linenumbers"))
-
-const twemoji = require("twemoji")
 
 markdown.renderer.rules.emoji = (token, idx) =>
     `<span class="emoji emoji-"${token[idx].content}">${token[idx].content}</span>`

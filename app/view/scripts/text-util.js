@@ -241,7 +241,7 @@ const simplifyIndent = preTagId => {
 
 
 const isURL = text =>
-    /^((http[s]?|ftp):\/)?\/?([^\/\s]+)((\/\w+)*\/)([\w\-\.]+[^#?\s]+)(.*)?(#[\w\-]+)?$/iu.test(text)
+    /^((http[s]?|ftp|file):\/)\/?([^\/\s]+)((\/\w+)*\/)([\w\-\.]+[^#?\s]+)(.*)?(#[\w\-]+)?$/iu.test(text)
 
 module.exports = {
     extractFileName,
