@@ -169,13 +169,13 @@ const markdown = new MarkdownIt({
     aotolabel:  true,
 })
 .use(require("markdown-it-relativelink")({
-
+    // TODO...
 }))
 .use(require("markdown-it-colorful-checkbox"))
+.use(require("markdown-it-multicolumn").default)
 .use(require("markdown-it-collapsible"))
 .use(require("markdown-it-ruby"))
 .use(require("markdown-it-adobe-plugin"))
-.use(require("markdown-it-front-matter"))
 .use(require("markdown-it-checkbox"))
 .use(require("@luckrya/markdown-it-link-to-card").linkToCardPlugin)
 .use(require("markdown-it-ins"))

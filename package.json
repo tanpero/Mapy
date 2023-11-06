@@ -82,6 +82,7 @@
     "markdown-it-mark": "^3.0.1",
     "markdown-it-marked": "^0.3.3",
     "markdown-it-modify-token": "^1.0.2",
+    "markdown-it-multicolumn": "^0.1.5",
     "markdown-it-multimd-table": "^4.2.3",
     "markdown-it-named-code-blocks": "^0.2.0",
     "markdown-it-obsidian-images": "^1.0.1",
