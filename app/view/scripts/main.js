@@ -185,7 +185,10 @@ const markdown = new MarkdownIt({
 .use(require("markdown-it-sup"))
 .use(require("markdown-it-footnote"))
 .use(require("markdown-it-sidenote"))
-.use(require("@gerhobbelt/markdown-it-inline-text-color"))
+.use(require("markdown-it-color").default, {
+    defaultClassName: "color",
+    inline: true,
+})
 .use(require("markdown-it-complex-table").default)
 .use(require("markdown-it-small"))
 .use(require("markdown-it-bidi"))
