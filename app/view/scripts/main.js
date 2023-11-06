@@ -157,12 +157,9 @@ const markdown = new MarkdownIt({
 .use(require("markdown-it-codetabs"))
 .use(require("markdown-it-image-caption"))
 .use(require("markdown-it-html5-media").html5Media)
+.use(require("markdown-it-emoji-mart"))
 .use(require("markdown-it-anchor"))
 .use(require("markdown-it-toc-done-right"))
-.use(require("markdown-it-emoji", {
-    "smile": [ ":)", ":-)" ],
-    "laughing": ":D",
-}))
 .use(require("markdown-it-easy-tables"))
 .use(require("markdown-it-multimd-table"), {
     multiline:  true,
@@ -194,6 +191,11 @@ const markdown = new MarkdownIt({
 .use(require("markdown-it-small"))
 .use(require("markdown-it-bidi"))
 .use(require("markdown-it-inject-linenumbers"))
+
+const twemoji = require("twemoji")
+
+markdown.renderer.rules.emoji = (token, idx) =>
+    `<span class="emoji emoji-"${token[idx].content}">${token[idx].content}</span>`
 
 require("./markdown-plugin/container")(markdown)
 

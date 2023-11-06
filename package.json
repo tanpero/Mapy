@@ -64,7 +64,7 @@
     "markdown-it-container": "^3.0.0",
     "markdown-it-copy": "^1.2.0",
     "markdown-it-easy-tables": "^0.1.1",
-    "markdown-it-emoji": "^2.0.2",
+    "markdown-it-emoji-mart": "^0.1.1",
     "markdown-it-fancy-lists": "^1.2.3",
     "markdown-it-fontawesome": "^0.3.0",
     "markdown-it-footnote": "^3.0.3",
@@ -106,7 +106,6 @@
     "segmentit": "^2.0.3",
     "textile-js": "^2.1.1",
     "tippy.js": "^6.3.7",
-    "twemoji": "^14.0.2",
     "v8-compile-cache": "^2.4.0",
     "vanilla-context-menu": "^1.6.0"
   },
