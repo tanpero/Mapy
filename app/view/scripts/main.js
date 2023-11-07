@@ -49,9 +49,9 @@ const cm = new EditorView({
     parent: markdownWrapper
 })
 
-const getMarkdown = () => cm.state.doc.toString()
+const getMarkdown = module.exports.getMarkdown = () => cm.state.doc.toString()
 
-const setMarkdown = text => {
+const setMarkdown = module.exports.setMarkdown = text => {
     cm.dispatch({
         changes: {from: 0, to: cm.state.doc.length, insert: text}
     })
@@ -263,7 +263,7 @@ const toSavePdfFile = () => {
     if (fileStatus.isTitled) {
         const html = generateHTML(htmlView.innerHTML)
         const pdfPath = fileStatus.filePath.replace(/\.[^/.]+$/, ".pdf")
-        outputPDF(html, pdfPath)
+        alert("PDF 导出功能暂时移除，待完善后再加入")
     } else {
         showSaveFileDialog()
     }
