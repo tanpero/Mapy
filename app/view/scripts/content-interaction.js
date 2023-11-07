@@ -4,15 +4,15 @@ const insertTextAtCursor = require("./insert-text-at-cursor")
 const { getMarkdown, setMarkdown } = require("./main")
 
 const insertContent = (el, text) => {
-    insertTextAtCursor(el, text, setMarkdown, getMarkdown)
+    insertTextAtCursor(el, NodeHtmlMarkdown.translate(text), setMarkdown, getMarkdown)
 }
 
 const paste = async element => {
     try {
-        const clipboardItems = await navigator.clipboard.read();
+        const clipboardItems = await navigator.clipboard.read()
         for (const clipboardItem of clipboardItems) {
             for (const type of clipboardItem.types) {
-                const blob = await clipboardItem.getType(type);
+                const blob = await clipboardItem.getType(type)
                 const reader = new FileReader()
                 reader.onload = e => insertContent(element, e.target.result)
                 reader.readAsText(blob)

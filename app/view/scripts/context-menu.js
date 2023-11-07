@@ -1,5 +1,5 @@
 const VanillaContextMenu = require("vanilla-context-menu")
-const clipboard = require("./clipboard-interaction")
+const content = require("./content-interaction")
 
 const setContextMenuOnSelecting = container =>
 new VanillaContextMenu({
@@ -17,7 +17,7 @@ new VanillaContextMenu({
             label: "粘贴",
             iconHTML: `<span class="material-icons">content_paste</span>`,
             callback () {
-                clipboard.paste(container)
+                content.paste(container)
             }
         }, {
             label: "删除",
