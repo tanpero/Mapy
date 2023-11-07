@@ -23,7 +23,11 @@ const paste = async element => {
     }
 }
 
+const link = (el, text) => {
+    insertTextAtCursor(el, `[${text}](${text})`)
+}
+
 module.exports = {
-    paste
+    paste, link
 }
 

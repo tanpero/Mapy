@@ -24,8 +24,10 @@ const htmlView = document.querySelector("#html")
 const searchBox = document.querySelector(".search")
 const searchInput = document.querySelector("#search")
 const isSearchBoxVisible = () => searchBox.style.display === "block"
-
 searchBox.style.display = "none"
+
+
+let bidiLinks = []
 
 let updateHtml = () => {}
 let setMonitor = () => {}
@@ -178,9 +180,6 @@ const markdown = new MarkdownIt({
     multibody:  true,
     aotolabel:  true,
 })
-.use(require("markdown-it-relativelink")({
-    // TODO...
-}))
 .use(require("markdown-it-colorful-checkbox"))
 .use(require("markdown-it-multicolumn").default)
 .use(require("markdown-it-collapsible"))

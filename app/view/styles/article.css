@@ -202,3 +202,8 @@ aside {
     margin: 0 .05em 0 .1em;
     vertical-align: 0.1em;
 }
+
+.bi-directional-link {
+    text-decoration: none;
+    color: cyan;
+}

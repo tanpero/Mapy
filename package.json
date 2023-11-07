@@ -79,6 +79,7 @@
     "markdown-it-multicolumn": "^0.1.5",
     "markdown-it-multimd-table": "^4.2.3",
     "markdown-it-named-code-blocks": "^0.2.0",
+    "markdown-it-regexp": "^0.4.0",
     "markdown-it-relativelink": "^0.4.2",
     "markdown-it-replace-it": "^1.0.0",
     "markdown-it-replace-link": "^1.2.0",
