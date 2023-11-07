@@ -10,6 +10,7 @@ const windowInitSettings = {
         nodeIntegration: true,
         contextIsolation: false,
         webviewTag: true,
+        enableRemoteModule: true,
     },
 }
 

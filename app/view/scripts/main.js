@@ -60,6 +60,11 @@ const setMarkdown = text => {
 
 const markdownView = document.querySelector(".cm-content")
 
+const menu = require("./context-menu")
+
+// TODO...
+menu.setContextMenuOnSelecting(document.querySelector("#markdown"))
+
 const appTitle = document.querySelector("title")
 
 let fileStatus = {
@@ -114,6 +119,8 @@ hljs.addPlugin({
 
 const meetHeading = require("./markdown-plugin/heading")
 
+const openFile = path => ipcRenderer.send("open-file", path)
+
 const markdown = new MarkdownIt({
     html: true,
     xhtmlOut: true,
@@ -121,15 +128,17 @@ const markdown = new MarkdownIt({
     typographer: true,
     modifyToken (token, env) {
         switch (token.type) {
-        case "image":
+        case "image": {
             let _path = token.attrObj.src
             if (!isURL(_path) && !path.isAbsolute(_path)) {
                 token.attrObj.src = path.resolve(path.dirname(fileStatus.filePath), _path)
             }
             break
-        case "link_open":
+        }
+        case "link_open": {
             token.attrObj.target = '_blank'
             break
+        }
         }
     },
 }).use(require("markdown-it-modify-token"))
@@ -160,6 +169,7 @@ const markdown = new MarkdownIt({
 .use(require("markdown-it-emoji-mart"))
 .use(require("markdown-it-anchor"))
 .use(require("markdown-it-toc-done-right"))
+.use(require("markdown-it-complex-table").default)
 .use(require("markdown-it-easy-tables"))
 .use(require("markdown-it-multimd-table"), {
     multiline:  true,
@@ -190,7 +200,6 @@ const markdown = new MarkdownIt({
     defaultClassName: "color",
     inline: true,
 })
-.use(require("markdown-it-complex-table").default)
 .use(require("markdown-it-small"))
 .use(require("markdown-it-bidi"))
 .use(require("markdown-it-inject-linenumbers"))
