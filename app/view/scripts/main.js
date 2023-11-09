@@ -12,7 +12,8 @@ const { clearInterval } = require("timers")
 const cm_lang_markdown = require("@codemirror/lang-markdown").markdown
 const { oneDark } = require("@codemirror/theme-one-dark")
 const { basicSetup, EditorView } = require("codemirror")
-const { EditorState } = require("@codemirror/state")
+const { keymap } = require("@codemirror/view")
+const { EditorState} = require("@codemirror/state")
 const { outputPDF } = require("./output-pdf")
 
 const {
@@ -32,22 +33,24 @@ let bidiLinks = []
 let updateHtml = () => {}
 let setMonitor = () => {}
 
-const cm = new EditorView({
-    state: EditorState.create({
-        doc: "",
-        extensions: [
-            basicSetup,
-            cm_lang_markdown(),
-            oneDark,
-            EditorView.lineWrapping,
-            EditorView.updateListener.of(e => {
-                updateHtml()
-                setMonitor()
-            })
-        ],
-        
-    }),
 
+const state = EditorState.create({
+    doc: "",
+    extensions: [
+        basicSetup,
+        cm_lang_markdown(),
+        oneDark,
+        EditorView.lineWrapping,
+        EditorView.updateListener.of(e => {
+            updateHtml()
+            setMonitor()
+        }),
+    ]    
+})
+  
+  
+const cm = new EditorView({
+    state: state,
     parent: markdownWrapper
 })
 

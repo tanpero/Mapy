@@ -23,10 +23,10 @@ module.exports = (input, text, setSource, getSource) => {
 
     // 如果可以通过 Text Node 操作输入框，使用 Text Node 进行插入
     if (canManipulateViaTextNodes(input)) {
-        const node = input.firstChild
-        const offset = 0
-        const startNode = null
-        const endNode = null
+        let node = input.firstChild
+        let offset = 0
+        let startNode = null
+        let endNode = null
 
         while (node && (startNode === null || endNode === null)) {
             const nodeLength = node.nodeValue.length

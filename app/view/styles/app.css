@@ -1,0 +1,117 @@
+html {
+    box-sizing: border-box;
+}
+
+*, *::before, *::after {
+    box-sizing: inherit;
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+body {
+    background-color: #23241f;
+    color: antiquewhite;
+    margin: 0;
+    padding: 0;
+    position: relative;
+}
+
+body {
+    font: menu;
+}
+
+div {
+    outline: none;
+    margin: 0;
+}
+
+
+.content {
+    height: 100vh;
+    display: flex;
+}
+
+.raw-markdown, .rendered-html {
+    padding: 1em;
+    max-width: 50%;
+    flex-grow: 1;
+    overflow-y: scroll;
+    font-size: 16px;
+}
+
+.raw-markdown {    
+    padding-right: 0;
+    border: 5px solid #23241f;
+    color: rgb(238, 252, 250);
+    font-family: monospace;
+}
+
+.rendered-html {
+    letter-spacing: 1px;
+    line-height: 1.5;
+    text-indent: 2em;
+    text-align: left;
+    word-break: break-all;
+    width: 80cqw;
+}
+
+.raw-markdown.drag-over {
+    background-color: rgb(181, 220, 216);
+    border-color: rgb(75, 160, 151);
+}
+
+.raw-markdown.drag-error {
+    background-color: rgba(170, 57, 57, 0.7);
+    border-color: rgba(255, 170, 170, 0.8);
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+    height: 0;
+}
+::-webkit-scrollbar-track {
+    background-color: rgb(40, 44, 52)
+}
+::-webkit-scrollbar-thumb {
+    background-color: #abb09f;
+}
+
+.cm-line {
+    padding-right: 5px;
+}
+
+@font-face {
+    font-family: 'Material Icons';
+    font-style: normal;
+    font-weight: 400;
+    src: url(../fonts/material-icons.woff2) format('woff2');
+}
+
+.material-icons {
+    font-family: 'Material Icons';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px;  /* Preferred icon size */
+    display: inline-block;
+    line-height: 1;
+    text-transform: none;
+    letter-spacing: normal;
+    word-wrap: normal;
+    white-space: nowrap;
+    direction: ltr;
+  
+    /* Support for all WebKit browsers. */
+    -webkit-font-smoothing: antialiased;
+    /* Support for Safari and Chrome. */
+    text-rendering: optimizeLegibility;
+  
+    /* Support for Firefox. */
+    -moz-osx-font-smoothing: grayscale;
+  
+    /* Support for IE. */
+    font-feature-settings: 'liga';
+}
