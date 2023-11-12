@@ -20,8 +20,34 @@ const {
     triggerBox, searchHighlightPlugin, setInputListener, removeInputListener
 } = require("./search-and-replace")
 
-const markdownWrapper = document.querySelector("#markdown")
-const htmlView = document.querySelector("#html")
+
+const container = document.createElement("div")
+container.className = "container"
+
+const content = document.createElement("section")
+content.className = "content"
+
+const label = document.createElement("label")
+label.setAttribute("for", "markdown")
+label.textContent = "Markdown"
+label.hidden = true
+
+const markdownWrapper = document.createElement("div")
+markdownWrapper.className = "raw-markdown"
+markdownWrapper.id = "markdown"
+
+const htmlView = document.createElement("div")
+htmlView.className = "rendered-html"
+htmlView.id = "html"
+
+content.appendChild(label)
+content.appendChild(markdownWrapper)
+content.appendChild(htmlView)
+
+container.appendChild(content)
+
+document.body.appendChild(container)
+
 const searchBox = document.querySelector(".search")
 const searchInput = document.querySelector("#search")
 const isSearchBoxVisible = () => searchBox.style.display === "block"
@@ -118,7 +144,7 @@ hljs.registerLanguage(
 
 hljs.addPlugin({
     "after:highlight": result => {
-        result.value = result.value.replace(/^/gm, '<span class="line-num"></span>')
+        result.value = result.value.replace(/^/gm, `<span class="line-num"></span>`)
     }
 })
 
@@ -141,7 +167,7 @@ const markdown = new MarkdownIt({
             break
         }
         case "link_open": {
-            token.attrObj.target = '_blank'
+            token.attrObj.target = "_blank"
             break
         }
         }
@@ -322,7 +348,7 @@ searchInput.addEventListener("blur", () => {
 })
 
 
-document.addEventListener('keydown',  event => {
+document.addEventListener("keydown",  event => {
 
     if (event.ctrlKey) {
         switch(event.key.toLocaleUpperCase()) {
