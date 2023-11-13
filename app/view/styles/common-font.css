@@ -11,7 +11,13 @@
 }
 
 @font-face {
-    font-family: XialuWenkai;
-    src: url("../fonts/LXGWWenKaiLite-Light.ttf") format("truetype");
-    font-weight: lighter;
+    font-family: Consolas;
+    src: url("../fonts/Consolas-Regular.ttf");
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: Hack;
+    src: url("../fonts/Hack-Regular.ttf");
+    font-weight: normal;
 }

@@ -22,10 +22,6 @@ body {
     position: relative;
 }
 
-body {
-    font-family: XialuWenkai;
-}
-
 div {
     outline: none;
     margin: 0;
@@ -47,18 +43,27 @@ div {
 
 .raw-markdown {    
     padding-right: 0;
+    padding-left: 0;
     border: 5px solid #23241f;
     color: rgb(238, 252, 250);
-    font-family: monospace;
+}
+
+.CodeMirror {    
+    font-family: Consolas !important;
 }
 
 .rendered-html {
+    font-family: XialuWenkai;
     letter-spacing: 1px;
     line-height: 1.5;
     text-indent: 2em;
     text-align: left;
     word-break: break-all;
     width: 80cqw;
+}
+
+.cm-line {
+    font-family: Consolas !important;
 }
 
 .raw-markdown.drag-over {
