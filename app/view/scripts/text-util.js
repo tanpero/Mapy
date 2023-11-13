@@ -243,6 +243,15 @@ const simplifyIndent = preTagId => {
 const isURL = text =>
     /^((http[s]?|ftp|file):\/)\/?([^\/\s]+)((\/\w+)*\/)([\w\-\.]+[^#?\s]+)(.*)?(#[\w\-]+)?$/iu.test(text)
 
+const isAbsolutePath = _text => {
+    let text = decodeURI(_text)
+    const windowsPattern = /^[a-zA-Z]:\\(?:[^\\/:*?"<>|\r\n]+\\)*[^\\/:*?"<>|\r\n]*/u
+    const posixPattern = /^(?:\/[\w-]+)+/u
+  
+    return windowsPattern.test(text) || posixPattern.test(text)
+}
+  
+
 module.exports = {
     extractFileName,
     extractWorkPath,
@@ -250,4 +259,5 @@ module.exports = {
     generateHTML,
     simplifyIndent,
     isURL,
+    isAbsolutePath,
 }

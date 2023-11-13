@@ -4,7 +4,7 @@ const {
     showOpenFileDialog, showSaveFileDialog, showSaveHtmlFileDialog,
     showFileHasBeenChangedAccidentally,
 } = require("./dialogs")
-const { extractFileName, generateHTML, isURL } = require("./text-util")
+const { extractFileName, generateHTML, isURL, isAbsolutePath } = require("./text-util")
 const { ipcRenderer } = require("electron")
 const fs = require("fs")
 const path = require("path")
@@ -161,8 +161,11 @@ const markdown = new MarkdownIt({
         switch (token.type) {
         case "image": {
             let _path = token.attrObj.src
-            if (!isURL(_path) && !path.isAbsolute(_path)) {
+            if (!isURL(_path) && !isAbsolutePath(_path)) {
                 token.attrObj.src = path.resolve(path.dirname(fileStatus.filePath), _path)
+            }
+            if (isAbsolutePath(_path)) {
+                token.attrObj.src = decodeURI(_path)
             }
             break
         }

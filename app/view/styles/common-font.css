@@ -1,0 +1,17 @@
+@font-face {
+    font-family: XialuWenkai;
+    src: url("../fonts/LXGWWenKaiLite-Regular.ttf") format("truetype");  
+    font-weight: normal;
+}
+  
+@font-face {
+    font-family: XialuWenkai;
+    src: url("../fonts/LXGWWenKaiLite-Bold.ttf") format("truetype");  
+    font-weight: bold;
+}
+
+@font-face {
+    font-family: XialuWenkai;
+    src: url("../fonts/LXGWWenKaiLite-Light.ttf") format("truetype");
+    font-weight: lighter;
+}
