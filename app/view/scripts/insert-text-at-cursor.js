@@ -1,6 +1,6 @@
 let browserSupportsTextareaTextNodes
 
-const canManipulateViaTextNodes = input => {
+function canManipulateViaTextNodes(input) {
     if (input.nodeName !== "TEXTAREA") {
         return false
     }
@@ -12,53 +12,84 @@ const canManipulateViaTextNodes = input => {
     return browserSupportsTextareaTextNodes
 }
 
-
 module.exports = (input, text, setSource, getSource) => {
+    // Most of the used APIs only work with the field selected
     input.focus()
 
-    const start = input.selectionStart
-    const end = input.selectionEnd
-    const range = document.createRange()
-    const textNode = document.createTextNode(text)
-
-    // 如果可以通过 Text Node 操作输入框，使用 Text Node 进行插入
-    if (canManipulateViaTextNodes(input)) {
-        let node = input.firstChild
-        let offset = 0
-        let startNode = null
-        let endNode = null
-
-        while (node && (startNode === null || endNode === null)) {
-            const nodeLength = node.nodeValue.length
-            if (start >= offset && start <= offset + nodeLength) {
-                range.setStart((startNode = node), start - offset)
-            }
-            if (end >= offset && end <= offset + nodeLength) {
-                range.setEnd((endNode = node), end - offset)
-            }
-            offset += nodeLength
-            node = node.nextSibling
-        }
-
-        // 如果开始位置和结束位置不相同，删除原有内容并插入新内容
-        if (start !== end) {
-            range.deleteContents()
-            range.insertNode(textNode)
+    // Webkit + Edge
+    const isSuccess = document.execCommand("insertText", false, text)
+    if (!isSuccess) {
+        const start = input.selectionStart
+        const end = input.selectionEnd
+        // Firefox (non-standard method)
+        if (typeof input.setRangeText === "function") {
+            input.setRangeText(text)
         } else {
-            // 如果开始位置和结束位置相同，直接替换原有内容为新内容
-            range.deleteContents()
-            range.insertNode(textNode)
+            // To make a change we just need a Range, not a Selection
+            const range = document.createRange()
+            const textNode = document.createTextNode(text)
+
+            if (canManipulateViaTextNodes(input)) {
+                let node = input.firstChild
+
+                // If textarea is empty, just insert the text
+                if (!node) {
+                    input.appendChild(textNode)
+                } else {
+                    // Otherwise we need to find a nodes for start and end
+                    let offset = 0
+                    let startNode = null
+                    let endNode = null
+
+                    while (node && (startNode === null || endNode === null)) {
+                        const nodeLength = node.nodeValue.length
+
+                        // if start of the selection falls into current node
+                        if (start >= offset && start <= offset + nodeLength) {
+                            range.setStart((startNode = node), start - offset)
+                        }
+
+                        // if end of the selection falls into current node
+                        if (end >= offset && end <= offset + nodeLength) {
+                            range.setEnd((endNode = node), end - offset)
+                        }
+
+                        offset += nodeLength
+                        node = node.nextSibling
+                    }
+
+                    // If there is some text selected, remove it as we should replace it
+                    if (start !== end) {
+                        range.deleteContents()
+                    }
+                }
+            }
+
+            // If the node is a textarea and the range doesn't span outside the element
+            //
+            // Get the commonAncestorContainer of the selected range and test its type
+            // If the node is of type `#text` it means that we're still working with text nodes within our textarea element
+            // otherwise, if it's of type `#document` for example it means our selection spans outside the textarea.
+            if (
+                canManipulateViaTextNodes(input) &&
+                range.commonAncestorContainer.nodeName === "#text"
+            ) {
+                // Finally insert a new node. The browser will automatically split start and end nodes into two if necessary
+                range.insertNode(textNode)
+            } else {
+                // If the node is not a textarea or the range spans outside a textarea the only way is to replace the whole value
+                const value = getSource()
+                setSource(value.slice(0, start) + text + value.slice(end))
+            }
         }
-    } else { // 如果不能通过 Text Node 操作输入框，使用其他方法插入文本
-        const value = getSource()
-        setSource(value.slice(0, start) + text + value.slice(end))
+
+        console.log(input)
+        // Correct the cursor position to be at the end of the insertion
+        //input.setSelectionRange(start + text.length, start + text.length)
+
+        // Notify any possible listeners of the change
+        const e = document.createEvent("UIEvent")
+        e.initEvent("input", true, false)
+        input.dispatchEvent(e)
     }
-
-
-    // 将光标移动到插入文本后的位置，并触发 input 事件，以便更新显示的内容和状态
-    input.setSelectionRange(start + text.length, start + text.length)
-    const e = document.createEvent("UIEvent")
-    e.initEvent("input", true, false)
-    input.dispatchEvent(e)
 }
-

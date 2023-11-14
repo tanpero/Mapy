@@ -350,6 +350,12 @@ searchInput.addEventListener("blur", () => {
     if (isSearchBoxVisible()) triggerBox(searchBox, searchInput)
 })
 
+const interaction = require("./content-interaction")
+
+document.addEventListener("paste", event => {
+    event.preventDefault()
+    //interaction.paste(document.querySelector("#markdown"))
+})
 
 document.addEventListener("keydown",  event => {
 
