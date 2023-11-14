@@ -1,5 +1,12 @@
 const path = require("path")
-const { app, clipboard, Menu, Tray, systemPreferences } = require("electron")
+const {
+    app,
+    clipboard,
+    Menu,
+    Tray,
+    globalShortcut,
+    BrowserWindow,
+} = require("electron")
 
 const clippings = []
 
@@ -14,9 +21,30 @@ const onReady = () => {
         tray.on("click", tray.popUpContextMenu)
     }
 
+    const browserWindow = new BrowserWindow({
+        show: false
+    })
+
+    browserWindow.loadFile(path.join(__dirname, "view", "components", "extractor", "index.html"))
+
     if (app.dock) {
         app.dock.hide()
     }
+
+    const activationShortcut = globalShortcut.register(
+        "CommandOrControl+Option+C",
+        () => tray.popUpContextMenu()
+    ) || console.error("Global activation shortcut failed to register")
+
+    const newClippingShortcut = globalShortcut.register(
+        "CommandOrControl+Shift+Option+C",
+        () => {
+            const clipping = addClipping()
+            if (clipping) {
+
+            }
+        }
+    ) || console.error("Global new clipping shortcut failed to register")
 
     updateMenu()
 
@@ -35,7 +63,7 @@ const updateMenu = () => {
         {
             type: "separator",
         },
-        ...clippings.map(createClippingMenuItem),
+        ...clippings.slice(0, 10).map(createClippingMenuItem),
         {
             type: "separator"
         },
@@ -52,14 +80,19 @@ const updateMenu = () => {
 
 const addClipping = () => {
     const clipping = clipboard.readText()
-    clippings.push(clipping)
+    if (clippings.includes(clipping)) {
+        return
+    }
+    clippings.unshift(clipping)
     updateMenu()
     return clipping
 }
 
 const createClippingMenuItem = (clipping, index) => {
     return {
-        label: clipping,
+        label: clipping.length > 20
+                ? clipping.slice(0, 20) + "…"
+                : clipping,
         click () {
             clipboard.writeText(clipping)
         },
