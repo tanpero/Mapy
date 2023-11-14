@@ -69,6 +69,7 @@ const template = [
             },
             {
                 label: "开发者工具",
+                accelerator: "CommandOrControl+Shift+I",
                 click (item, focusedWindow) {
                     if (focusedWindow) {
                         focusedWindow.webContents.toggleDevTools()
@@ -78,6 +79,7 @@ const template = [
             { type: "separator" },
             {
                 label: "关于项目",
+                accelerator: "CommandOrControl+Shift+A",
                 click (item, focusedWindow) {
                     if (focusedWindow) {
                         mainProcess.showAboutWindow()

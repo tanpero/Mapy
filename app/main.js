@@ -3,6 +3,7 @@ const { app, BrowserWindow, dialog, ipcMain, shell, nativeTheme, Menu } = requir
 const path = require("node:path")
 const fs = require("fs")
 const applicationMenu = require("./application-menu")
+const extractor = require("./extractor")
 const as = fileName => path.join('app', 'view', fileName)
 
 const windowInitSettings = {
@@ -72,6 +73,7 @@ const createWindow = exports.createWindow = (file = "index.html", windowConfigur
 
 app.whenReady().then(() => {    
     createWindow()
+    extractor.onReady()
 })
 
 app.on("activate", (e, hasVisibleWindows) => !hasVisibleWindows && createWindow())
